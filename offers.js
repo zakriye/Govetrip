@@ -7,6 +7,13 @@
   var origin = '', run = 0, packageSearch = !!document.getElementById('pcForm');
   function pad(n) { return (n < 10 ? '0' : '') + n; }
   function lang() { return document.documentElement.lang || 'en'; }
+  function tr(en, fi) {
+    if (lang() === 'fi') return fi;
+    if (typeof gvtT !== 'function') return en;
+    var core = en.trim();
+    var out = gvtT(core);
+    return out === core ? en : en.replace(core, out);
+  }
   function cur() { return (typeof currentProfile !== 'undefined' && currentProfile.currency) || 'EUR'; }
   function sym(c) { return { EUR: '€', USD: '$', GBP: '£', SEK: 'kr', NOK: 'kr', DKK: 'kr', PLN: 'zł', CHF: 'CHF' }[c] || c; }
   function fmt(d) { return d.toLocaleDateString(lang(), { weekday: 'short', day: 'numeric', month: 'numeric' }); }
@@ -43,12 +50,12 @@
     var dateRange = fmt(dep) + ' ▸ ' + fmt(ret);
     a.querySelector('p').textContent = hit || !packageSearch
       ? dateRange
-      : (lang() === 'fi' ? 'Esimerkkipäivät: ' : 'Sample dates: ') + dateRange;
+      : (tr('Sample dates: ', 'Esimerkkipäivät: ')) + dateRange;
     a.querySelector('strong').textContent = hit
       ? (packageSearch
-        ? (lang() === 'fi' ? 'Lento alk. ' : 'Flight from ')
-        : (lang() === 'fi' ? 'alk. ' : 'from ')) + Math.round(hit.price) + ' ' + sym(cur())
-      : (lang() === 'fi' ? 'Katso lennot →' : 'Search flights →');
+        ? (tr('Flight from ', 'Lento alk. '))
+        : (tr('from ', 'alk. '))) + Math.round(hit.price) + ' ' + sym(cur())
+      : (tr('Search flights →', 'Katso lennot →'));
     return a;
   }
   function packageCard(o, d, name, hit) {
@@ -68,7 +75,7 @@
     hotel.href = 'https://www.booking.com/searchresults.html?' + query.toString();
     hotel.target = '_blank';
     hotel.rel = 'sponsored noopener';
-    hotel.textContent = lang() === 'fi' ? 'Hae hotellit samoille päiville →' : 'Find hotels for these dates →';
+    hotel.textContent = tr('Find hotels for these dates →', 'Hae hotellit samoille päiville →');
     wrapper.appendChild(hotel);
     return wrapper;
   }
@@ -76,7 +83,7 @@
     if (!origin) return;
     var my = ++run; track.innerHTML = ''; var errors = { configuration: false, upstream: false }; var now = new Date(), mks = [monthKey(now), monthKey(new Date(now.getFullYear(), now.getMonth() + 1, 1))];
     host.hidden = false;
-    if (status) status.textContent = lang() === 'fi' ? 'Haetaan edullisia lentohintoja…' : 'Finding low flight fares…';
+    if (status) status.textContent = tr('Finding low flight fares…', 'Haetaan edullisia lentohintoja…');
     var queue = dests.filter(function (x) { return x[0] !== origin; }), hits = [], cursor = 0;
     function worker() {
       if (my !== run) return Promise.resolve();
@@ -107,20 +114,20 @@
         if (status) {
           status.textContent = errors.configuration
             ? (packageSearch
-              ? (lang() === 'fi' ? 'Lentohinnat eivät ole tällä hetkellä saatavilla. Hae lento ja hotelli erikseen kumppaneilta.' : 'Flight prices are unavailable right now. Search for flights and hotels separately.')
-              : (lang() === 'fi' ? 'Live-hinnat eivät ole käytössä. Voit silti hakea lentoja suoraan.' : 'Live prices are unavailable. You can still search flights directly.'))
+              ? (tr('Flight prices are unavailable right now. Search for flights and hotels separately.', 'Lentohinnat eivät ole tällä hetkellä saatavilla. Hae lento ja hotelli erikseen kumppaneilta.'))
+              : (tr('Live prices are unavailable. You can still search flights directly.', 'Live-hinnat eivät ole käytössä. Voit silti hakea lentoja suoraan.')))
             : errors.upstream
               ? (packageSearch
-                ? (lang() === 'fi' ? 'Lentohintojen haku ei onnistunut juuri nyt. Voit silti vertailla lentoja ja hotelleja kumppaneilla.' : 'Flight prices could not be loaded. You can still compare flights and hotels with our partners.')
-                : (lang() === 'fi' ? 'Hintojen haku ei onnistunut juuri nyt. Voit silti hakea lentoja suoraan.' : 'Prices could not be loaded right now. You can still search flights directly.'))
+                ? (tr('Flight prices could not be loaded. You can still compare flights and hotels with our partners.', 'Lentohintojen haku ei onnistunut juuri nyt. Voit silti vertailla lentoja ja hotelleja kumppaneilla.'))
+                : (tr('Prices could not be loaded right now. You can still search flights directly.', 'Hintojen haku ei onnistunut juuri nyt. Voit silti hakea lentoja suoraan.')))
               : (packageSearch
-                ? (lang() === 'fi' ? 'Edullisia lentoja ei löytynyt näille reiteille. Hae lennot ja hotellit erikseen kumppaneilta.' : 'No low fares were found for these routes. Search for flights and hotels separately.')
-                : (lang() === 'fi' ? 'Hintoja ei löytynyt tälle lähtökentälle. Voit silti selata kohteita ja hakea lentoja.' : 'No fares were found for this airport. You can still browse destinations and search flights.'));
+                ? (tr('No low fares were found for these routes. Search for flights and hotels separately.', 'Edullisia lentoja ei löytynyt näille reiteille. Hae lennot ja hotellit erikseen kumppaneilta.'))
+                : (tr('No fares were found for this airport. You can still browse destinations and search flights.', 'Hintoja ei löytynyt tälle lähtökentälle. Voit silti selata kohteita ja hakea lentoja.')));
         }
       } else if (status) {
         status.textContent = packageSearch
-          ? (lang() === 'fi' ? 'Arvioidut lentohinnat, halvimmat ensin. Hotellin hinta näytetään erikseen kumppanin sivulla.' : 'Estimated flight fares, lowest first. Hotel prices are shown separately by the partner.')
-          : (lang() === 'fi' ? 'Arvioidut meno-paluu hinnat, halvimmat ensin.' : 'Estimated return fares, lowest price first.');
+          ? (tr('Estimated flight fares, lowest first. Hotel prices are shown separately by the partner.', 'Arvioidut lentohinnat, halvimmat ensin. Hotellin hinta näytetään erikseen kumppanin sivulla.'))
+          : (tr('Estimated return fares, lowest price first.', 'Arvioidut meno-paluu hinnat, halvimmat ensin.'));
       }
     });
   }

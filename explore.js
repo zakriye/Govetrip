@@ -7,6 +7,13 @@
   var origin = '', run = 0, results = [], loadError = '';
   function pad(n) { return (n < 10 ? '0' : '') + n; }
   function lang() { return document.documentElement.lang || 'en'; }
+  function tr(en, fi) {
+    if (lang() === 'fi') return fi;
+    if (typeof gvtT !== 'function') return en;
+    var core = en.trim();
+    var out = gvtT(core);
+    return out === core ? en : en.replace(core, out);
+  }
   function cur() { return (typeof currentProfile !== 'undefined' && currentProfile.currency) || 'EUR'; }
   function sym(c) { return { EUR: '€', USD: '$', GBP: '£', SEK: 'kr', NOK: 'kr', DKK: 'kr', PLN: 'zł', CHF: 'CHF' }[c] || c; }
   function fmt(d) { return d.toLocaleDateString(lang(), { weekday: 'short', day: 'numeric', month: 'numeric' }); }
@@ -50,8 +57,8 @@
       var description = document.createElement('p');
       var link = document.createElement('strong');
       title.textContent = lang() === 'fi' ? (fi[d[1]] || d[1]) : d[1];
-      description.textContent = lang() === 'fi' ? 'Katso päivät ja lennot' : 'Explore dates and flights';
-      link.textContent = lang() === 'fi' ? 'Hae lentoja →' : 'Search flights →';
+      description.textContent = tr('Explore dates and flights', 'Katso päivät ja lennot');
+      link.textContent = tr('Search flights →', 'Hae lentoja →');
       body.appendChild(title);
       body.appendChild(description);
       body.appendChild(link);
@@ -61,7 +68,7 @@
     });
   }
   function render() {
-    var lim = +max.value; $('#exMaxVal').textContent = lim >= 600 ? (lang() === 'fi' ? 'ei rajaa' : 'no limit') : '≤ ' + lim + ' ' + sym(cur());
+    var lim = +max.value; $('#exMaxVal').textContent = lim >= 600 ? (tr('no limit', 'ei rajaa')) : '≤ ' + lim + ' ' + sym(cur());
     grid.innerHTML = '';
     var filtered = results.filter(function (r) { return lim >= 600 || r.price <= lim; }).sort(function (a, b) { return a.price - b.price; });
     filtered.forEach(function (r) {
@@ -72,17 +79,17 @@
       a.innerHTML = '<img loading="lazy" alt="" src="https://photo.hotellook.com/static/cities/480x320/' + r.code + '.auto"><div><h3></h3><p></p><strong></strong></div>';
       a.querySelector('h3').textContent = lang() === 'fi' ? (fi[r.name] || r.name) : r.name;
       a.querySelector('p').textContent = fmt(dep) + ' ▸ ' + fmt(ret);
-      a.querySelector('strong').textContent = (lang() === 'fi' ? 'alk. ' : 'from ') + Math.round(r.price) + ' ' + sym(cur());
+      a.querySelector('strong').textContent = (tr('from ', 'alk. ')) + Math.round(r.price) + ' ' + sym(cur());
       grid.appendChild(a);
     });
     if (origin && !results.length) renderFallback();
     if (results.length && !filtered.length) {
-      status.textContent = lang() === 'fi' ? 'Valitulla hintarajalla ei löytynyt lentoja. Nosta enimmäishintaa nähdäksesi lisää vaihtoehtoja.' : 'No flights were found within this budget. Increase the maximum price to see more options.';
+      status.textContent = tr('No flights were found within this budget. Increase the maximum price to see more options.', 'Valitulla hintarajalla ei löytynyt lentoja. Nosta enimmäishintaa nähdäksesi lisää vaihtoehtoja.');
     }
   }
   function load() {
     if (!origin) return; var my = ++run; results = []; loadError = ''; grid.innerHTML = ''; var n = new Date(), m = [mk(n), mk(new Date(n.getFullYear(), n.getMonth() + 1, 1))], queue = dests.filter(function (d) { return d[0] !== origin; }), left = queue.length, cursor = 0;
-    status.textContent = lang() === 'fi' ? 'Haetaan hintoja…' : 'Loading prices…';
+    status.textContent = tr('Loading prices…', 'Haetaan hintoja…');
     function worker() {
       var d = queue[cursor++];
       if (!d) return Promise.resolve();
@@ -91,12 +98,12 @@
         if (h) { results.push({ code: d[0], name: d[1], price: h.price, date: h.date }); render(); }
         if (--left === 0) {
           status.textContent = results.length
-            ? (lang() === 'fi' ? 'Arvioidut halvimmat hinnat. Lopullinen hinta näkyy hakutuloksissa.' : 'Estimated lowest fares. The final price is shown in the search results.')
+            ? (tr('Estimated lowest fares. The final price is shown in the search results.', 'Arvioidut halvimmat hinnat. Lopullinen hinta näkyy hakutuloksissa.'))
             : loadError === 'configuration'
-              ? (lang() === 'fi' ? 'Reaaliaikaisia hintoja ei ole vielä määritetty. Voit silti selata kohteita ja tarkistaa hinnat hakukumppanilta.' : 'Live prices are not configured yet. You can still browse destinations and check fares with our booking partner.')
+              ? (tr('Live prices are not configured yet. You can still browse destinations and check fares with our booking partner.', 'Reaaliaikaisia hintoja ei ole vielä määritetty. Voit silti selata kohteita ja tarkistaa hinnat hakukumppanilta.'))
               : loadError === 'upstream'
-                ? (lang() === 'fi' ? 'Hintapalvelu ei vastaa juuri nyt. Voit silti selata kohteita ja tarkistaa hinnat hakukumppanilta.' : 'The fare service is unavailable right now. You can still browse destinations and check fares with our booking partner.')
-                : (lang() === 'fi' ? 'Hintoja ei löytynyt juuri nyt. Kokeile myöhemmin uudelleen.' : 'No prices were found right now. Please try again later.');
+                ? (tr('The fare service is unavailable right now. You can still browse destinations and check fares with our booking partner.', 'Hintapalvelu ei vastaa juuri nyt. Voit silti selata kohteita ja tarkistaa hinnat hakukumppanilta.'))
+                : (tr('No prices were found right now. Please try again later.', 'Hintoja ei löytynyt juuri nyt. Kokeile myöhemmin uudelleen.'));
           render();
         }
         return worker();

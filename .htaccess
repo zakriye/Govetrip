@@ -1,3 +1,10 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTP_HOST} ^govetrip\.com$ [NC,OR]
+  RewriteCond %{HTTPS} off
+  RewriteRule ^(.*)$ https://www.govetrip.com/$1 [R=301,L]
+</IfModule>
+
 <FilesMatch "^api-config(\.local|\.example)?\.php$">
   Require all denied
 </FilesMatch>

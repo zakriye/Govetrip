@@ -1531,6 +1531,7 @@ window.addEventListener('gvt-flight-deals-ready', initFlightDealLinks);
   if (!footer || footer.querySelector('.app-download')) return;
 
   const standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+  if (standalone || /android-app:/.test(document.referrer) || /[?&]source=twa/.test(location.search)) return;
   const box = document.createElement('div');
   box.className = 'container app-download';
   const title = document.createElement('h3');

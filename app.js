@@ -1535,6 +1535,9 @@ window.addEventListener('gvt-flight-deals-ready', initFlightDealLinks);
     document.documentElement.classList.add('is-app');
     const vp = document.querySelector('meta[name="viewport"]');
     if (vp) vp.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no');
+    const stop = (e) => e.preventDefault();
+    document.addEventListener('touchmove', (e) => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
+    ['gesturestart', 'gesturechange', 'gestureend'].forEach((n) => document.addEventListener(n, stop));
     return;
   }
   if (!footer || footer.querySelector('.app-download')) return;

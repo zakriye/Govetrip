@@ -3618,3 +3618,8 @@ body.nav-open { overflow: hidden; }
 .app-badge small:empty{display:none}
 .app-hint{margin:12px 0 0;max-width:520px;font-size:.92rem;opacity:.9}
 @media (max-width:760px){.app-badge{width:100%}}
+
+/* No sideways panning; in the Android app also no pinch zoom */
+html, body { max-width: 100%; overflow-x: clip; }
+.site-header { max-width: 100vw; overflow-x: clip; }
+html.is-app, html.is-app body { touch-action: pan-y; overscroll-behavior-x: none; }

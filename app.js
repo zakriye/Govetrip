@@ -1528,10 +1528,16 @@ window.addEventListener('gvt-flight-deals-ready', initFlightDealLinks);
   const lang = (document.documentElement.lang || 'en').slice(0, 2).toLowerCase();
   const t = T[lang] || T.en;
   const footer = document.querySelector('.site-footer');
-  if (!footer || footer.querySelector('.app-download')) return;
-
   const standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
-  if (standalone || /android-app:/.test(document.referrer) || /[?&]source=twa/.test(location.search)) return;
+  const inApp = standalone || /android-app:/.test(document.referrer) || /[?&]source=twa/.test(location.search) || sessionStorage.getItem('gvt-app') === '1';
+  if (inApp) {
+    sessionStorage.setItem('gvt-app', '1');
+    document.documentElement.classList.add('is-app');
+    const vp = document.querySelector('meta[name="viewport"]');
+    if (vp) vp.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no');
+    return;
+  }
+  if (!footer || footer.querySelector('.app-download')) return;
   const box = document.createElement('div');
   box.className = 'container app-download';
   const title = document.createElement('h3');

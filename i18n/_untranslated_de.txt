@@ -1,0 +1,22 @@
+0;url=index.html#search
+Lentohaku löytyy
+Lentohaku | GoVeTrip
+etusivulta
+https://www.govetrip.com/
+https://www.govetrip.com/about.html
+https://www.govetrip.com/affiliate-disclosure.html
+https://www.govetrip.com/assets/bangkok-skyline.jpg
+https://www.govetrip.com/cars.html
+https://www.govetrip.com/contact.html
+https://www.govetrip.com/deals.html
+https://www.govetrip.com/explore.html
+https://www.govetrip.com/hotels.html
+https://www.govetrip.com/packages.html
+https://www.govetrip.com/privacy.html
+https://www.govetrip.com/stays.html
+https://www.govetrip.com/terms.html
+info@govetrip.com
+noindex, follow
+summary_large_image
+website
+width=device-width, initial-scale=1.0

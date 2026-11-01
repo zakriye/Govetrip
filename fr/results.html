@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr" data-localized>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Résultats de recherche | GoVeTrip</title>
+    <meta name="robots" content="noindex, follow" />
+    <link rel="canonical" href="https://www.govetrip.com/fr/results.html" />
+    <link rel="stylesheet" href="/styles.css?v=lang12-20261102" />
+  
+    <meta property="og:locale" content="fr_FR" />
+  </head>
+  <body>
+    <header class="site-header"><div class="container nav-shell">
+      <a class="brand" href="index.html"><img src="/assets/govetrip-logo.png" alt="GoVeTrip" width="200" height="65" /></a>
+      <nav class="main-nav" aria-label="Navigation principale"><a href="flights.html">Vols</a><a href="hotels.html">Hôtels</a><a href="cars.html">Locations de voiture</a><a href="packages.html">Voyages organisés</a><a href="stays.html">Locations de vacances</a><a href="deals.html">Bons plans</a><a href="about.html">À propos</a><a href="contact.html">Contact</a></nav>
+      <a class="btn btn-ghost" href="index.html">Nouvelle recherche</a>
+    </div></header>
+    <main class="legal-shell"><div class="container">
+      <div class="legal-card results-card">
+        <span class="eyebrow" id="resultsEyebrow">Recherche GoVeTrip</span>
+        <h1 id="resultsTitle">Votre recherche est prête.</h1>
+        <p id="resultsSummary">Vérifiez les détails de la recherche ci-dessous. Vous restez sur GoVeTrip tant que vous ne choisissez pas de continuer vers un partenaire de réservation.</p>
+        <div class="result-summary" id="resultSummary"></div>
+        <div class="result-options">
+          <article class="result-option"><span class="service-badge" id="partnerName">Partenaire de voyage</span><h2 id="optionTitle">Comparer les options disponibles</h2><p>GoVeTrip ne facture aucuns frais de réservation. La réservation finale s'effectue sur le site sécurisé du partenaire choisi.</p><a class="btn btn-primary" id="continueBooking" href="https://aviasales.tpm.lv/kG8FZBWw" target="_blank" rel="sponsored noopener">Continuer vers le partenaire de réservation</a></article>
+          <article class="result-option secondary-option"><h2>Envie d'affiner votre recherche ?</h2><p>Revenez sur GoVeTrip et modifiez votre trajet, vos dates, votre langue ou votre devise avant de quitter ce site.</p><a class="btn btn-ghost" href="index.html#search">Modifier la recherche</a></article>
+        </div>
+      </div>
+    </div></main>
+    <script>
+      (function () {
+        var params = new URLSearchParams(window.location.search);
+        var service = params.get('service') || 'flights';
+        var config = {
+          flights: { label: 'Flights', title: 'Compare flight options before you book.', partner: 'Aviasales', url: 'https://aviasales.tpm.lv/kG8FZBWw' },
+          hotels: { label: 'Hotels', title: 'Compare stays before you book.', partner: 'Booking.com', url: 'https://www.booking.com/searchresults.html' },
+          stays: { label: 'Holiday homes', title: 'Compare holiday homes before you book.', partner: 'Booking.com', url: 'https://www.booking.com/searchresults.html' },
+          cars: { label: 'Car rentals', title: 'Compare rental cars before you book.', partner: 'EconomyBookings', url: 'https://tpwdgt.com/r?trs=573176&marker=293373.293373&p=4480&source_type=customlink&type=click&campaign_id=10&locale=en' },
+          packages: { label: 'Package trips', title: 'Explore package trip options.', partner: 'Travel partner', url: 'https://aviasales.tpm.lv/kG8FZBWw' }
+        }[service] || { label: 'Travel', title: 'Compare travel options before you book.', partner: 'Travel partner', url: 'https://aviasales.tpm.lv/kG8FZBWw' };
+        document.getElementById('resultsEyebrow').textContent = config.label;
+        document.getElementById('resultsTitle').textContent = config.title;
+        document.getElementById('partnerName').textContent = config.partner;
+        document.getElementById('optionTitle').textContent = 'Continue with ' + config.partner;
+        var summary = document.getElementById('resultSummary');
+        if ((service === 'hotels' || service === 'stays') && params.get('destination')) {
+          params.set('checkIn', params.get('checkIn') || dateAfterDays(14));
+          params.set('checkOut', params.get('checkOut') || dateAfterDays(17));
+          params.set('guests', params.get('guests') || '2');
+        }
+        if ((service === 'flights' || service === 'packages') && params.get('from') && (params.get('to') || params.get('destination'))) {
+          params.set('departure', params.get('departure') || dateAfterDays(30));
+          if (params.get('tripType') !== 'oneway' && params.get('tripType') !== 'one-way') {
+            params.set('return', params.get('return') || dateAfterDays(37));
+          }
+          params.set('travelers', params.get('travelers') || '1');
+        }
+        var fields = ['from', 'to', 'destination', 'departure', 'return', 'secondFrom', 'secondTo', 'secondDeparture', 'checkIn', 'checkOut', 'pickup', 'pickupDate', 'dropoffDate', 'travelers', 'guests', 'tripType', 'currency', 'country'].filter(function (key) { return params.get(key); });
+        var labels = { from: 'From', to: 'To', destination: 'Destination', departure: 'Departure', return: 'Return', secondFrom: 'Second departure', secondTo: 'Second destination', secondDeparture: 'Second departure date', checkIn: 'Check-in', checkOut: 'Check-out', pickup: 'Pick-up location', pickupDate: 'Pick-up date', dropoffDate: 'Drop-off date', travelers: 'Travelers', guests: 'Guests', tripType: 'Trip type', currency: 'Currency', country: 'Country' };
+        fields.forEach(function (key) {
+          var item = document.createElement('span');
+          var label = document.createElement('strong');
+          label.textContent = labels[key] || key;
+          item.appendChild(label);
+          item.appendChild(document.createTextNode(' ' + params.get(key)));
+          summary.appendChild(item);
+        });
+        var query = new URLSearchParams(params);
+        query.delete('service');
+        var queryString = query.toString();
+        var link = document.getElementById('continueBooking');
+        var cities = { helsinki: 'HEL', paris: 'PAR', london: 'LON', stockholm: 'STO', oslo: 'OSL', copenhagen: 'CPH', berlin: 'BER', rome: 'ROM', madrid: 'MAD', barcelona: 'BCN', lisbon: 'LIS', amsterdam: 'AMS', bangkok: 'BKK', 'new york': 'NYC', tallinn: 'TLL', riga: 'RIX', vienna: 'VIE', prague: 'PRG', athens: 'ATH', dubai: 'DXB', istanbul: 'IST', frankfurt: 'FRA', munich: 'MUC', milan: 'MIL', warsaw: 'WAW', zurich: 'ZRH', brussels: 'BRU', tokyo: 'TYO', singapore: 'SIN', tampere: 'TMP', turku: 'TKU', oulu: 'OUL', rovaniemi: 'RVN' };
+        function iata(value) {
+          if (!value) return '';
+          var code = value.match(/\(([A-Za-z]{3})\)/);
+          if (code) return code[1].toUpperCase();
+          var name = value.toLowerCase().replace(/\(.*\)/, '').trim();
+          if (cities[name]) return cities[name];
+          return /^[A-Za-z]{3}$/.test(name) ? name.toUpperCase() : '';
+        }
+        function dm(value) {
+          var p = (value || '').split('-');
+          return p.length === 3 ? p[2] + p[1] : '';
+        }
+        function dateAfterDays(days) {
+          var date = new Date();
+          date.setDate(date.getDate() + days);
+          return date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0');
+        }
+        var currency = (params.get('currency') || 'EUR').toLowerCase();
+        if (service === 'flights' || service === 'packages') {
+          var origin = iata(params.get('from')), dest = iata(params.get('to') || params.get('destination'));
+          var out = dm(params.get('departure')), back = params.get('tripType') === 'oneway' || params.get('tripType') === 'one-way' ? '' : dm(params.get('return'));
+          var target = 'https://www.aviasales.com/';
+          if (origin && dest && out) {
+            target += 'search/' + origin + out + dest + back + (parseInt(params.get('travelers'), 10) || 1);
+          }
+          target += '?currency=' + currency;
+          link.href = config.url + '?u=' + encodeURIComponent(target);
+        } else if (service === 'cars') {
+          link.href = config.url + '&u=' + encodeURIComponent('https://www.economybookings.com/en/cars');
+        } else if (service === 'hotels' || service === 'stays') {
+          var bookingQuery = new URLSearchParams({
+            ss: params.get('destination') || '',
+            checkin: params.get('checkIn') || '',
+            checkout: params.get('checkOut') || '',
+            group_adults: params.get('guests') || '2',
+            no_rooms: '1',
+            selected_currency: params.get('currency') || 'EUR'
+          });
+          link.href = params.get('destination') ? config.url + '?' + bookingQuery.toString() : 'https://www.booking.com/';
+        } else {
+          link.href = queryString ? config.url + '?' + queryString : config.url;
+        }
+      })();
+    </script>
+  </body>
+  <script src="/app.js?v=lang12-20261102"></script>
+</html>

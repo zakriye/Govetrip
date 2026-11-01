@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Explore Cheap Flight Destinations | GoVeTrip</title>
+    <meta name="description" content="Where can you fly cheaply? Explore low-cost flight destinations from your airport and plan your next trip." />
+    <link rel="canonical" href="https://www.govetrip.com/explore.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="GoVeTrip" />
+    <meta property="og:title" content="Explore Cheap Flight Destinations | GoVeTrip" />
+    <meta property="og:description" content="Where can you fly cheaply? Explore low-cost flight destinations from your airport and plan your next trip." />
+    <meta property="og:url" content="https://www.govetrip.com/explore.html" />
+    <meta property="og:image" content="https://www.govetrip.com/assets/bangkok-skyline.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Explore Cheap Flight Destinations | GoVeTrip" />
+    <meta name="twitter:description" content="Where can you fly cheaply? Explore low-cost flight destinations from your airport and plan your next trip." />
+    <meta name="twitter:image" content="https://www.govetrip.com/assets/bangkok-skyline.jpg" />
+    <link rel="stylesheet" href="styles.css?v=lang12-20261102" />
+  
+    <!-- hreflang -->
+    <link rel="alternate" hreflang="en" href="https://www.govetrip.com/explore.html" />
+    <link rel="alternate" hreflang="fi" href="https://www.govetrip.com/fi/explore.html" />
+    <link rel="alternate" hreflang="sv" href="https://www.govetrip.com/sv/explore.html" />
+    <link rel="alternate" hreflang="nb" href="https://www.govetrip.com/no/explore.html" />
+    <link rel="alternate" hreflang="da" href="https://www.govetrip.com/da/explore.html" />
+    <link rel="alternate" hreflang="de" href="https://www.govetrip.com/de/explore.html" />
+    <link rel="alternate" hreflang="fr" href="https://www.govetrip.com/fr/explore.html" />
+    <link rel="alternate" hreflang="es" href="https://www.govetrip.com/es/explore.html" />
+    <link rel="alternate" hreflang="it" href="https://www.govetrip.com/it/explore.html" />
+    <link rel="alternate" hreflang="nl" href="https://www.govetrip.com/nl/explore.html" />
+    <link rel="alternate" hreflang="pl" href="https://www.govetrip.com/pl/explore.html" />
+    <link rel="alternate" hreflang="pt" href="https://www.govetrip.com/pt/explore.html" />
+    <link rel="alternate" hreflang="x-default" href="https://www.govetrip.com/explore.html" />
+    <!-- /hreflang -->
+    <!-- lang-redirect --><script>try{var l=localStorage.getItem('govetrip.language');if(l&&/^(fi|sv|no|da|de|fr|es|it|nl|pl|pt)$/.test(l)&&!document.documentElement.hasAttribute('data-localized'))location.replace('/'+l+'/'+(location.pathname.split('/').pop()||'index.html')+location.search+location.hash)}catch(e){}</script><!-- /lang-redirect -->
+  </head>
+  <body>
+    <header class="site-header"><div class="container nav-shell">
+      <a class="brand" href="index.html"><img src="assets/govetrip-logo.png" alt="GoVeTrip" width="200" height="65" /></a>
+      <nav class="main-nav" aria-label="Main navigation"><a href="flights.html">Flights</a><a href="hotels.html">Hotels</a><a href="cars.html">Car Rentals</a><a href="packages.html">Package trips</a><a href="stays.html">Holiday homes</a><a href="deals.html">Deals</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav>
+      <a class="btn btn-primary" href="index.html#search">Search now</a>
+    </div></header>
+    <main class="legal-shell"><div class="container" style="padding-top:20px">
+      <span class="eyebrow">Explore</span><h1>Where can you fly cheaply?</h1>
+      <p>See the cheapest destinations from your airport. Change the origin, set a budget and pick a trip length.</p>
+      <div class="ex-filters">
+        <label>From <input id="exFrom" type="text" placeholder="City or airport" autocomplete="off" /><ul class="pc-suggest" id="exSug" hidden></ul></label>
+        <label>Max price <span class="ex-range"><input id="exMax" type="range" min="30" max="600" step="10" value="600" /><b id="exMaxVal"></b></span></label>
+        <label>Trip length <select id="exLen"><option value="3">3 days</option><option value="7" selected>7 days</option><option value="14">14 days</option></select></label>
+      </div>
+      <p id="exStatus" class="pc-legend"></p>
+      <div class="ex-grid" id="exGrid"></div>
+      <style>
+        .ex-filters{display:flex;flex-wrap:wrap;gap:16px;margin:20px 0;align-items:end}.ex-filters label{display:grid;gap:4px;font-weight:700;font-size:.85rem;color:#4a3f66;position:relative}
+        .ex-filters input[type=text],.ex-filters select{padding:12px;border:1px solid #d6cfe6;border-radius:10px;font:inherit;min-width:200px}.ex-range{display:flex;align-items:center;gap:10px}.ex-range input{width:180px;accent-color:#6b2fb5}.ex-range b{min-width:76px}
+        .ex-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;margin-bottom:30px}
+        .ex-card{background:#fff;border-radius:22px;padding:8px;text-decoration:none;color:#1c1530;box-shadow:0 8px 24px rgba(40,10,90,.1);display:flex;flex-direction:column}
+        .ex-card img{width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:16px;background:#eee}.ex-card div{padding:10px 10px 8px;display:grid;gap:4px}
+        .ex-card h3{margin:0}.ex-card p{margin:0;font-size:.85rem;color:#4a3f66}.ex-card strong{margin-top:10px;font-size:1.1rem}.ex-card:hover{transform:translateY(-2px)}.ex-card-fallback{min-height:130px;justify-content:center;border:1px solid #e4def2}.ex-card-fallback div{padding:18px}.ex-card-fallback strong{color:#6b2fb5}.ex-note{margin:0 0 22px;padding:14px 16px;border-radius:12px;background:#f0ebf8;color:#4a3f66}
+        .pc-suggest{position:absolute;top:100%;left:0;right:0;z-index:30;margin:2px 0 0;padding:4px;list-style:none;background:#fff;border:1px solid #d6cfe6;border-radius:10px;box-shadow:0 10px 30px rgba(40,10,90,.18)}.pc-suggest li{padding:10px 12px;border-radius:8px;cursor:pointer}.pc-suggest li:hover{background:#f1ebff}
+        @media(max-width:760px){.ex-filters{display:grid;grid-template-columns:1fr 1fr;align-items:end}.ex-filters label:first-child{grid-column:1/-1}.ex-filters input[type=text],.ex-filters select{min-width:0;width:100%;box-sizing:border-box}.ex-range input{width:100%;min-width:0}.ex-range{flex-wrap:wrap}.ex-grid{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}}
+        @media(max-width:480px){.ex-filters{grid-template-columns:1fr}.ex-filters label:first-child{grid-column:auto}}
+      </style>
+      <script src="explore.js?v=lang12-20261102"></script>
+    </div></main>
+  </body>
+  <script src="app.js?v=lang12-20261102"></script>
+</html>

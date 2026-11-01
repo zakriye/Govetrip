@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GoVeTrip | Global Travel Deals</title>
+    <meta name="robots" content="noindex, follow" />
+    <link rel="canonical" href="https://www.govetrip.com/" />
+    <meta
+      name="description"
+      content="GoVeTrip helps travelers compare flights, hotels, and car rentals across countries with local pricing, regional deals, and affiliate booking links."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css?v=lang12-20261102" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav-shell">
+        <a class="brand" href="index.html" aria-label="GoVeTrip home">
+          <img src="assets/govetrip-logo.png" alt="GoVeTrip" width="200" height="65" />
+        </a>
+
+        <nav class="main-nav" aria-label="Main navigation">
+          <a href="flights.html">Flights</a>
+          <a href="hotels.html">Hotels</a>
+          <a href="cars.html">Car Rentals</a>
+          <a href="packages.html">Package trips</a>
+          <a href="stays.html">Holiday homes</a>
+          <a href="deals.html">Deals</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+
+        <div class="nav-actions">
+          <a class="btn btn-primary" href="#search">Search trips</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero hero-search-first">
+        <div class="container">
+          <div class="hero-top-layout">
+          <div class="hero-copy hero-copy-centered">
+            <span class="eyebrow">GoVeTrip travel search</span>
+            <h1 id="heroTitle">Where do you want to travel?</h1>
+
+          </div>
+          </div>
+
+          <div class="hero-card hero-search-card" id="search">
+            <div class="card-topbar">
+              <span class="dot blue"></span>
+              <span class="dot green"></span>
+              <span class="dot orange"></span>
+            </div>
+
+            <form class="search-form" id="travelSearchForm">
+              <div class="service-tabs" aria-label="Travel service">
+                <button class="service-tab active" type="button" data-service-tab="flights"><span class="service-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5L21 16Z"/></svg></span><span>Flights</span></button>
+                <button class="service-tab" type="button" data-service-tab="hotels"><span class="service-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 11V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4M3 19v-6h18v6M6 16h.01M18 16h.01M5 19v2M19 19v2"/></svg></span><span>Hotels</span></button>
+                <button class="service-tab" type="button" data-service-tab="cars"><span class="service-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 16 1.5-6h11L19 16M4 16h16v3H4zM7 19v2M17 19v2M7 13h.01M17 13h.01"/></svg></span><span>Car rentals</span></button>
+                <button class="service-tab" type="button" data-service-tab="packages"><span class="service-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 18h16M6 18l1-7h10l1 7M8 11l2-4h4l2 4M12 7V3M9 4h6"/></svg></span><span>Package trips</span></button>
+                <button class="service-tab" type="button" data-service-tab="stays"><span class="service-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20V6l8-3 8 3v14M8 20v-5h8v5M8 9h.01M12 9h.01M16 9h.01"/></svg></span><span>Holiday homes</span></button>
+              </div>
+              <div class="flight-calendar">
+<section class="pc home-pc" id="priceCalendar">
+<div class="pc-bar" id="pcForm" autocomplete="off">
+          <div class="pc-trip"><select id="pcTrip" aria-label="Trip type"><option value="round">Round trip</option><option value="oneway">One way</option></select><div class="pc-paxwrap"><button type="button" id="pcPaxBtn" class="pc-paxbtn" aria-haspopup="true"></button><div class="pc-paxpop" id="pcPaxPop" hidden></div></div></div>
+          <div class="pc-fields">
+            <label class="pc-place"><span>From</span><input id="pcFrom" type="text" placeholder="City or airport" /></label>
+            <label class="pc-place"><span>To</span><input id="pcTo" type="text" placeholder="City or airport" /></label>
+            <div class="pc-datewrap"><span>Dates</span><button type="button" id="pcDates" class="pc-datebtn">Select dates</button>
+              <div class="pc-pop" id="pcPop" hidden>
+                <div class="pc-pophead"><button type="button" id="pcPrev" aria-label="Previous month">‹</button><span id="pcStep"></span><button type="button" id="pcNext" aria-label="Next month">›</button></div>
+                <div class="pc-months" id="pcMonths"></div>
+                <p class="pc-legend" id="pcNote"></p>
+              </div>
+            </div>
+            <button class="btn btn-primary pc-go" type="button">Search</button>
+          </div>
+          <p class="pc-error" id="pcError" hidden></p>
+        </div>
+</section>
+<style>
+.pc{margin:28px 0}.pc-bar{background:#fff;border:1px solid #e4def2;border-radius:16px;padding:16px;box-shadow:0 8px 24px rgba(40,10,90,.08)}
+        .pc-trip{display:flex;gap:10px;margin-bottom:12px}.pc-trip select{border:0;background:#f1ebff;border-radius:10px;padding:8px 12px;font:inherit;font-weight:700;color:#3b1d73}
+        .pc-fields{display:grid;grid-template-columns:1fr 1fr 1.2fr auto;gap:10px;align-items:end}
+        .pc-place,.pc-datewrap{display:grid;gap:4px;position:relative}.pc-fields span{font-size:.78rem;font-weight:700;color:#4a3f66}
+        .pc-fields input{padding:13px 12px;border:1px solid #d6cfe6;border-radius:10px;font:inherit;font-size:1rem;width:100%;box-sizing:border-box}
+        .pc-datebtn{padding:13px 12px;border:1px solid #d6cfe6;border-radius:10px;background:#fff;font:inherit;font-size:1rem;text-align:left;cursor:pointer;color:#1c1530}
+        .pc-datebtn.on{border-color:#6b2fb3;background:#f6f1ff}.pc-go{padding:13px 28px}
+        .pc-suggest{position:absolute;top:100%;left:0;right:0;z-index:30;margin:2px 0 0;padding:4px;list-style:none;background:#fff;border:1px solid #d6cfe6;border-radius:10px;box-shadow:0 10px 30px rgba(40,10,90,.18)}
+        .pc-suggest li{padding:10px 12px;border-radius:8px;cursor:pointer}.pc-suggest li:hover{background:#f1ebff}
+        .pc-paxwrap{position:relative}.pc-paxbtn{border:0;background:#f1ebff;border-radius:10px;padding:8px 12px;font:inherit;font-weight:700;color:#3b1d73;cursor:pointer}
+        .pc-paxpop{position:absolute;top:100%;left:0;z-index:50;margin-top:6px;width:300px;background:#fff;border:1px solid #d6cfe6;border-radius:14px;padding:16px;box-shadow:0 18px 50px rgba(40,10,90,.25)}
+        .pc-paxpop h4{margin:0 0 10px;font-size:.95rem}.pc-prow{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.pc-prow small{color:#7a6f96}
+        .pc-step{display:flex;align-items:center;gap:10px}.pc-step button{width:28px;height:28px;border:1px solid #6b2fb3;background:#fff;color:#6b2fb3;border-radius:6px;font-weight:700;cursor:pointer}.pc-step button:disabled{opacity:.3;cursor:default}.pc-step b{min-width:16px;text-align:center}
+        .pc-cabins{display:flex;flex-wrap:wrap;gap:8px;border-top:1px solid #e4def2;padding-top:12px}.pc-cabins button{border:1px solid #cdbbf0;background:#fff;border-radius:8px;padding:8px 12px;font:inherit;cursor:pointer}.pc-cabins button.on{border-color:#6b2fb3;background:#f1ebff;font-weight:700}
+        .pc-pop{position:absolute;top:100%;right:0;z-index:40;margin-top:6px;width:min(720px,92vw);background:#fff;border:1px solid #d6cfe6;border-radius:16px;padding:16px;box-shadow:0 18px 50px rgba(40,10,90,.25)}
+        .pc-pophead{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;font-weight:700;color:#3b1d73}
+        .pc-pophead button{border:0;background:#f1ebff;border-radius:10px;width:38px;height:38px;font-size:1.3rem;cursor:pointer}
+        .pc-months{display:grid;grid-template-columns:1fr 1fr;gap:22px}.pc-mtitle{text-align:center;font-weight:800;text-transform:capitalize;margin-bottom:8px}
+        .pc-week,.pc-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.pc-week span{text-align:center;font-size:.7rem;font-weight:700;color:#7a6f96}
+        .pc-day{border:0;border-radius:8px;min-height:44px;padding:2px;display:flex;flex-direction:column;align-items:center;justify-content:center;font:inherit;font-weight:700;color:#1c1530;background:#f4f2f9;cursor:pointer}
+        .pc-day small{font-size:.62rem;font-weight:600}.pc-day:disabled{opacity:.35;cursor:default}.pc-day:not(:disabled):hover{outline:2px solid #6b2fb3}
+        .pc-low{background:#9fe6b8}.pc-mid{background:#ffe27a}.pc-high{background:#ff9d9d}
+        .pc-in{background:#d9c2ff!important}.pc-end{background:#6b2fb3!important;color:#fff}
+        .pc-legend{font-size:.8rem;color:#7a6f96;margin:12px 0 0}.pc-error{color:#c0143c;font-weight:700;margin:10px 0 0}
+        @media(max-width:760px){.pc-fields{grid-template-columns:1fr}.pc-months{grid-template-columns:1fr}.pc-months .pc-m2{display:none}.pc-pop{position:static;width:auto;margin-top:8px}}
+      
+        .home-pc.pc{margin:8px 0 0}.home-pc .pc-bar{box-shadow:none;border:0;padding:8px 0}.legacy-hide{display:none!important}.pc-popwrap{position:relative}</style>
+
+              </div>
+              <div class="trip-type legacy-hide">
+                <button type="button" class="type-option active" data-trip-type="round">Round trip</button>
+                <button type="button" class="type-option" data-trip-type="one-way">One way</button>
+                <button type="button" class="type-option" data-trip-type="multi-city">Multi-city</button>
+              </div>
+
+              <div class="field-grid search-main-fields">
+                <label class="legacy-hide"><span>From</span>
+                  <input type="text" value="Helsinki (HEL)" aria-label="Departure city" />
+                </label>
+                <label class="legacy-hide"><span>To</span>
+                  <input type="text" value="Barcelona (BCN)" aria-label="Destination city" />
+                </label>
+                <label class="legacy-hide"><span>Departure</span>
+                  <input type="date" value="2026-10-08" aria-label="Departure date" />
+                </label>
+                <label class="legacy-hide"><span>Return</span>
+                  <input type="date" value="2026-10-18" aria-label="Return date" />
+                </label>
+                <label class="legacy-hide"><span>Travelers</span>
+                  <select name="travelers" aria-label="Number of travelers">
+                    <option value="2">2 Travelers</option>
+                    <option value="1">1 Traveler</option>
+                    <option value="3">3 Travelers</option>
+                    <option value="4">4 Travelers</option>
+                  </select>
+                </label>
+                <label>
+                  <span>Currency</span>
+                  <select id="currencySelect" aria-label="Currency selection">
+                    <option value="EUR">EUR</option>
+                    <option value="USD">USD</option>
+                    <option value="GBP">GBP</option>
+                    <option value="SEK">SEK</option>
+                    <option value="NOK">NOK</option>
+                    <option value="DKK">DKK</option>
+                    <option value="CHF">CHF</option>
+                    <option value="PLN">PLN</option>
+                  </select>
+                </label>
+                <label>
+                  <span>Language</span>
+                  <select id="languageSelect" aria-label="Language selection">
+                    <option value="en">English</option>
+                    <option value="fi">Suomi</option>
+                    <option value="sv">Svenska</option>
+                    <option value="de">Deutsch</option>
+                    <option value="fr">Français</option>
+                    <option value="es">Español</option>
+                    <option value="no">Norsk</option>
+                    <option value="da">Dansk</option>
+                    <option value="it">Italiano</option>
+                    <option value="nl">Nederlands</option>
+                    <option value="pl">Polski</option>
+                  </select>
+                </label>
+              </div>
+
+              <div class="field-grid multi-city-fields" id="multiCityFields" hidden>
+                <label><span>Second departure</span><input type="text" aria-label="Second departure city" /></label>
+                <label><span>Second destination</span><input type="text" aria-label="Second destination city" /></label>
+                <label><span>Second departure date</span><input type="date" aria-label="Second departure date" /></label>
+              </div>
+              <div class="search-options legacy-hide">
+                <label class="check-label"><input id="flexibleDates" type="checkbox" /> <span>Flexible dates</span></label>
+                <label class="check-label"><input id="directFlights" type="checkbox" /> <span>Direct flights only</span></label>
+                <a class="text-link" href="deals.html">Explore deals first</a>
+              </div>
+              <button type="submit" class="btn btn-primary wide-btn search-submit legacy-hide"><span>Search flights</span><span aria-hidden="true">→</span></button>
+              <p class="form-status" id="searchStatus" role="status" aria-live="polite"></p>
+            </form>
+          </div>
+          <div class="trust-row"><span>✓ Compare hundreds of travel sites</span><span>✓ Local prices and destinations</span><span>✓ Search free with GoVeTrip</span></div>
+        </div>
+      </section>
+
+      <section class="instant-deals section-shell">
+        <div class="container">
+          <div class="deal-banner">
+            <div><span class="eyebrow deal-eyebrow">Limited-time savings</span><h2>See today's best travel discounts first.</h2></div>
+            <a class="btn btn-primary" href="deals.html">See all deals</a>
+          </div>
+          <p class="offer-disclaimer">Example prices only. Live prices and availability are confirmed by the booking partner.</p>
+          <div class="quick-deals">
+            <article class="quick-deal"><span class="discount-badge">-25%</span><div class="quick-deal-image deal-flight"></div><div class="quick-deal-content"><span class="deal-type">Flights</span><h3>Helsinki → Paris</h3><p>From <s>€199</s> <strong>€149</strong></p><a data-flight-deal data-flight-origin="HEL" data-flight-destination="PAR" href="results.html?service=flights&amp;from=Helsinki&amp;to=Paris&amp;tripType=round&amp;travelers=1">View deal →</a></div></article>
+            <article class="quick-deal"><span class="discount-badge">-30%</span><div class="quick-deal-image deal-stay"></div><div class="quick-deal-content"><span class="deal-type">Holiday homes</span><h3>Lisbon apartments</h3><p>From <s>€120</s> <strong>€84/night</strong></p><a href="results.html?service=stays&amp;destination=Lisbon">View stay →</a></div></article>
+            <article class="quick-deal"><span class="discount-badge">-18%</span><div class="quick-deal-image deal-car"></div><div class="quick-deal-content"><span class="deal-type">Car rentals</span><h3>Barcelona airport</h3><p>From <s>€44</s> <strong>€36/day</strong></p><a href="results.html?service=cars&amp;pickup=Barcelona">View deal →</a></div></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="activity-cta section-shell" aria-labelledby="activityTitle">
+        <div class="container">
+          <div class="activity-section">
+            <div class="activity-section-heading">
+              <div><span class="eyebrow">Tours &amp; activities</span><h2 id="activityTitle">Things to do near your destination</h2><p class="activity-location" data-activity-location role="status">Finding experiences for your area…</p></div>
+              <form class="activity-search" data-activity-form>
+                <label class="visually-hidden" for="activityCity">City or destination</label>
+                <input id="activityCity" data-activity-city type="search" autocomplete="address-level2" placeholder="City or destination" required />
+                <button class="btn btn-primary" type="submit">Update</button>
+              </form>
+            </div>
+            <div class="activity-grid" data-activity-grid></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="deal-strip">
+        <div class="container">
+          <div class="deal-strip-heading"><h2>Travel deals from €128</h2><a href="deals.html">Explore all deals →</a></div>
+          <div class="deal-strip-grid">
+            <a class="deal-strip-card" data-flight-deal data-flight-origin="HEL" data-flight-destination="ARN" href="results.html?service=flights&amp;from=Helsinki&amp;to=Stockholm&amp;tripType=round&amp;travelers=1"><span class="deal-strip-image strip-stockholm"></span><span><strong>Stockholm</strong><small>From €128 · direct flights</small></span></a>
+            <a class="deal-strip-card" data-flight-deal data-flight-origin="HEL" data-flight-destination="WAW" href="results.html?service=flights&amp;from=Helsinki&amp;to=Warsaw&amp;tripType=round&amp;travelers=1"><span class="deal-strip-image strip-warsaw"></span><span><strong>Warsaw</strong><small>From €139 · direct flights</small></span></a>
+            <a class="deal-strip-card" href="results.html?service=hotels&amp;destination=Riga"><span class="deal-strip-image strip-riga"></span><span><strong>Riga stays</strong><small>From €54/night · -20%</small></span></a>
+            <a class="deal-strip-card" data-flight-deal data-flight-origin="HEL" data-flight-destination="VIE" href="results.html?service=flights&amp;from=Helsinki&amp;to=Vienna&amp;tripType=round&amp;travelers=1"><span class="deal-strip-image strip-vienna"></span><span><strong>Vienna</strong><small>From €168 · direct flights</small></span></a>
+          </div>
+        </div>
+      </section>
+
+      <section class="features section-shell">
+        <div class="container">
+          <header class="section-heading">
+            <span class="eyebrow">Built for global travelers</span>
+            <h2>Everything you need for local, flexible booking.</h2>
+          </header>
+
+          <div class="feature-grid">
+            <article class="feature-card">
+              <div class="feature-icon">📍</div>
+              <h3>Location-aware results</h3>
+              <p>Detect country, city, language, and nearby airports to surface relevant offers instantly.</p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">💱</div>
+              <h3>Local currency pricing</h3>
+              <p>Display prices in EUR, USD, GBP, SEK, NOK, or DKK based on browsing context or user choice.</p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">✈️</div>
+              <h3>Flight + hotel + car bundles</h3>
+              <p>Find the cheapest routes, nearby hotels, and local rental offers in one place.</p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">🔒</div>
+              <h3>Trusted partners</h3>
+              <p>Book through established travel partners with clear terms and privacy information.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="destinations section-shell" id="deals">
+        <div class="container">
+          <header class="section-heading split-header">
+            <div>
+              <span class="eyebrow">Trending deals</span>
+              <h2>Popular destinations this week.</h2>
+            </div>
+            <a class="text-link" href="explore.html">Explore more destinations</a>
+          </header>
+
+          <div class="destination-grid">
+            <article class="destination-card">
+              <div class="thumb thumb-one"></div>
+              <div class="destination-body">
+                <div class="destination-topline">
+                  <span>Paris</span>
+                  <strong id="priceParis">€149</strong>
+                </div>
+                <p>Flights + 3 nights · Spring escape</p>
+                <a class="text-link" data-flight-deal data-flight-origin="HEL" data-flight-destination="PAR" href="results.html?service=flights&amp;from=Helsinki&amp;to=Paris&amp;tripType=round&amp;travelers=1">View offer</a>
+              </div>
+            </article>
+
+            <article class="destination-card">
+              <div class="thumb thumb-two"></div>
+              <div class="destination-body">
+                <div class="destination-topline">
+                  <span>Lisbon</span>
+                  <strong id="priceLisbon">€179</strong>
+                </div>
+                <p>City breaks + coastal stay</p>
+                <a class="text-link" href="results.html?service=stays&amp;destination=Lisbon">View offer</a>
+              </div>
+            </article>
+
+            <article class="destination-card">
+              <div class="thumb thumb-three">
+                <a class="image-credit" href="https://commons.wikimedia.org/wiki/File:Bangkok_skyline,_Bangkok,_Thailand.jpg" target="_blank" rel="noopener noreferrer">Photo: Vyacheslav Argenberg / Wikimedia Commons (CC BY 4.0)</a>
+              </div>
+              <div class="destination-body">
+                <div class="destination-topline">
+                  <span>Bangkok</span>
+                  <strong id="priceBangkok">€219</strong>
+                </div>
+                <p>Warm-weather getaway</p>
+                <a class="text-link" data-flight-deal data-flight-origin="HEL" data-flight-destination="BKK" href="results.html?service=flights&amp;from=Helsinki&amp;to=Bangkok&amp;tripType=round&amp;travelers=1">View offer</a>
+              </div>
+            </article>
+
+            <article class="destination-card">
+              <div class="thumb thumb-four"></div>
+              <div class="destination-body">
+                <div class="destination-topline">
+                  <span>New York</span>
+                  <strong id="priceNY">$289</strong>
+                </div>
+                <p>Urban weekend + flights</p>
+                <a class="text-link" data-flight-deal data-flight-origin="HEL" data-flight-destination="NYC" href="results.html?service=flights&amp;from=Helsinki&amp;to=New%20York&amp;tripType=round&amp;travelers=1">View offer</a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div>
+          <a class="brand" href="index.html">
+            <img src="assets/govetrip-logo.png" alt="GoVeTrip" width="200" height="65" />
+          </a>
+          <p>Global travel deals with local relevance, transparent affiliate booking, and a clean mobile-first experience.</p>
+        </div>
+
+        <div>
+          <h4>Explore</h4>
+          <ul>
+            <li>            <a href="flights.html">Flights</a></li>
+              <li><a href="hotels.html">Hotels</a></li>
+              <li><a href="cars.html">Car rentals</a></li>
+              <li><a href="deals.html">Deals</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms &amp; Conditions</a></li>
+            <li><a href="affiliate-disclosure.html" style="font-size:.8em;opacity:.55">Partnerships</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4>Contact</h4>
+          <ul>
+            <li><a href="contact.html">Get in touch</a></li>
+            <li><a href="contact.html">Contact GoVeTrip</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="container footer-bottom">
+        <p>© 2026 GoVeTrip. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script src="app.js?v=lang12-20261102"></script>
+    <script src="activities.js?v=lang12-20261102"></script>
+    <script src="price-calendar.js?v=lang12-20261102"></script>
+    <script src="hero-gallery.js?v=lang12-20261102"></script>
+  </body>
+</html>

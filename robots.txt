@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /prices.php
+Disallow: /results.html
+
+Disallow: /api-config
+Sitemap: https://www.govetrip.com/sitemap.xml

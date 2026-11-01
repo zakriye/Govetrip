@@ -3472,3 +3472,5 @@ textarea:focus {
 .lang-dialog .lang-list { position: static; box-shadow: none; padding: 0; overflow-y: auto; min-width: 0; }
 .lang-dialog .lang-list li { gap: 0.9rem; padding: 0.7rem 0.9rem; }
 body.lang-open { overflow: hidden; }
+
+.go .go-head h2 { color: #fff; }

@@ -256,7 +256,7 @@
  "Contact GoVeTrip": "Contactar a GoVeTrip",
  "Your search is ready.": "A sua pesquisa está pronta.",
  "Review the search details below. You stay on GoVeTrip until you choose to continue to a booking partner.": "Reveja os detalhes da pesquisa abaixo. Permanece na GoVeTrip até escolher continuar para um parceiro de reservas.",
- "Compare flight options before you book.": "Compare opções de voos antes de reservar.",
+ "Compare flight options before you book.": "Compare opções de voo antes de reservar.",
  "Compare stays before you book.": "Compare alojamentos antes de reservar.",
  "Compare rental cars before you book.": "Compare carros de aluguer antes de reservar.",
  "GoVeTrip does not charge a booking fee. The final booking is completed on the selected partner's secure website.": "A GoVeTrip não cobra taxa de reserva. A reserva final é concluída no site seguro do parceiro selecionado.",
@@ -473,5 +473,7 @@
  "Sample dates:": "Datas de exemplo:",
  "Search flights →": "Pesquisar voos →",
  "The fare service is unavailable right now. You can still browse destinations and check fares with our booking partner.": "O serviço de tarifas não está disponível neste momento. Pode continuar a explorar destinos e consultar tarifas com o nosso parceiro de reservas.",
- "no limit": "sem limite"
+ "no limit": "sem limite",
+ "Compare holiday homes before you book.": "Compare casas de férias antes de reservar.",
+ "Compare travel options before you book.": "Compare opções de viagem antes de reservar."
 }

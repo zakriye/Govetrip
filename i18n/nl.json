@@ -257,7 +257,7 @@
  "Your search is ready.": "Je zoekopdracht is klaar.",
  "Review the search details below. You stay on GoVeTrip until you choose to continue to a booking partner.": "Controleer hieronder de zoekgegevens. Je blijft op GoVeTrip totdat je kiest door te gaan naar een boekingspartner.",
  "Compare flight options before you book.": "Vergelijk vluchtopties voordat je boekt.",
- "Compare stays before you book.": "Vergelijk verblijven voordat je boekt.",
+ "Compare stays before you book.": "Vergelijk accommodaties voordat je boekt.",
  "Compare rental cars before you book.": "Vergelijk huurauto's voordat je boekt.",
  "GoVeTrip does not charge a booking fee. The final booking is completed on the selected partner's secure website.": "GoVeTrip rekent geen boekingskosten. De definitieve boeking wordt afgerond op de beveiligde website van de gekozen partner.",
  "Continue to booking partner": "Ga door naar boekingspartner",
@@ -473,5 +473,7 @@
  "Sample dates:": "Voorbeelddata:",
  "Search flights →": "Zoek vluchten →",
  "The fare service is unavailable right now. You can still browse destinations and check fares with our booking partner.": "De tarievenservice is momenteel niet beschikbaar. Je kunt nog steeds bestemmingen bekijken en tarieven checken bij onze boekingspartner.",
- "no limit": "geen limiet"
+ "no limit": "geen limiet",
+ "Compare holiday homes before you book.": "Vergelijk vakantiehuizen voordat je boekt.",
+ "Compare travel options before you book.": "Vergelijk reisopties voordat je boekt."
 }

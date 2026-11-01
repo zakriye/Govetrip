@@ -1,3 +1,4 @@
+const assetVersion = ((document.currentScript && document.currentScript.src.match(/[?&]v=([^&]+)/)) || [])[1] || '1';
 const regionProfiles = {
   FI: { region: 'Finland', language: 'fi', currency: 'EUR', airport: 'Helsinki (HEL)' },
   SE: { region: 'Sweden', language: 'sv', currency: 'SEK', airport: 'Stockholm (ARN)' },
@@ -361,6 +362,8 @@ const pageTranslations = {
     'Review the search details below. You stay on GoVeTrip until you choose to continue to a booking partner.': 'Tarkista hakutiedot. Siirryt kumppanin sivustolle vasta, kun valitset jatkamisen.',
     'Compare flight options before you book.': 'Vertaile lentovaihtoehtoja ennen varausta.',
     'Compare stays before you book.': 'Vertaile majoituksia ennen varausta.',
+    'Compare holiday homes before you book.': 'Vertaile loma-asuntoja ennen varausta.',
+    'Compare travel options before you book.': 'Vertaile matkavaihtoehtoja ennen varausta.',
     'Compare rental cars before you book.': 'Vertaile vuokra-autoja ennen varausta.',
     "GoVeTrip does not charge a booking fee. The final booking is completed on the selected partner's secure website.": 'GoVeTrip ei veloita varausmaksua. Varaus tehdään valitun kumppanin verkkosivustolla.',
     'Continue to booking partner': 'Jatka kumppanin sivustolle',
@@ -810,7 +813,7 @@ function applyLanguage(language) {
     return;
   }
   // Keep the current text on screen until the dictionary arrives, so the page never flashes back to English.
-  fetch(`/i18n/${language}.json?v=${window.GVT_I18N_VERSION || '1'}`)
+  fetch(`/i18n/${language}.json?v=${assetVersion}`)
     .then((response) => (response.ok ? response.json() : {}))
     .then((data) => {
       pageTranslations[language] = { ...(pageTranslations[language] || {}), ...data };

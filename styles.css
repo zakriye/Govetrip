@@ -3474,3 +3474,95 @@ textarea:focus {
 body.lang-open { overflow: hidden; }
 
 .go .go-head h2 { color: #fff; }
+
+/* Compact at-a-glance offer layout (Momondo-style rows and carousels) */
+main .section-shell { padding: 1.1rem 0; }
+main .instant-deals { padding-top: 1.2rem; }
+main .instant-deals .deal-banner { padding: 0; border: 0; background: none; box-shadow: none; gap: 1rem; }
+main .instant-deals .deal-eyebrow { display: none; }
+main .instant-deals .deal-banner h2 { margin: 0; font-size: 1.25rem; }
+main .instant-deals .deal-banner .btn { min-height: 0; padding: 0.45rem 0.9rem; font-size: 0.85rem; white-space: nowrap; }
+main .instant-deals .offer-disclaimer { margin: 0.2rem 0 0.7rem; font-size: 0.72rem; }
+
+main .quick-deals,
+main .deal-strip-grid,
+main .destination-grid,
+main .activity-grid,
+main .feature-grid { gap: 0.75rem; }
+main .quick-deals { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+main .destination-grid,
+main .activity-grid,
+main .feature-grid,
+main .deal-strip-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+main .quick-deal { border-radius: 0.7rem; overflow: hidden; }
+main .quick-deal-image { height: 96px; min-height: 0; }
+main .quick-deal-content { padding: 0.55rem 0.75rem 0.7rem; gap: 0.15rem; }
+main .quick-deal .deal-type { font-size: 0.66rem; letter-spacing: 0.04em; }
+main .quick-deal h3 { margin: 0.1rem 0; font-size: 0.95rem; line-height: 1.2; }
+main .quick-deal p { margin: 0; font-size: 0.8rem; }
+main .quick-deal p strong { font-size: 1rem; }
+main .quick-deal-content a { margin-top: 0.2rem; font-size: 0.8rem; }
+main .discount-badge { top: 0.5rem; left: 0.5rem; padding: 0.15rem 0.45rem; font-size: 0.72rem; }
+
+main .destination-card .thumb { height: 96px; }
+main .destination-body { padding: 0.55rem 0.75rem 0.7rem; }
+main .destination-topline { margin-bottom: 0.15rem; font-size: 0.95rem; }
+main .destination-card p { margin: 0 0 0.3rem; font-size: 0.78rem; line-height: 1.3; }
+main .destination-card .text-link { font-size: 0.8rem; }
+main .destinations .section-heading { margin-bottom: 0.7rem; }
+main .destinations .section-heading h2,
+main .features .section-heading h2 { margin: 0; font-size: 1.25rem; }
+main .section-heading .eyebrow { display: none; }
+
+main .feature-card { padding: 0.7rem 0.8rem; }
+main .feature-icon { width: 30px; height: 30px; margin-bottom: 0.3rem; font-size: 0.95rem; }
+main .feature-card h3 { margin: 0 0 0.15rem; font-size: 0.9rem; }
+main .feature-card p { margin: 0; font-size: 0.76rem; line-height: 1.3; }
+main .features .section-heading { margin-bottom: 0.6rem; }
+
+main .deal-strip { padding: 1rem 0 0.9rem; }
+main .deal-strip-heading { margin-bottom: 0.6rem; }
+main .deal-strip-heading h2 { font-size: 1.25rem; }
+main .deal-strip-card { gap: 0.6rem; padding: 0.4rem; }
+main .deal-strip-image { width: 64px; height: 58px; }
+main .deal-strip-card strong { margin-bottom: 0.1rem; font-size: 0.92rem; }
+main .deal-strip-card small { font-size: 0.74rem; }
+
+main .activity-cta { padding-block: 0.6rem; }
+main .activity-section { padding: 0.9rem 1rem; }
+main .activity-section-heading { margin-bottom: 0.7rem; }
+main .activity-section .eyebrow { display: none; }
+main .activity-section h2 { margin: 0; font-size: 1.25rem; }
+main .activity-card-media,
+main .activity-card-image { height: 84px; }
+main .activity-card-copy { min-height: 0; gap: 0.3rem; }
+main .activity-card strong { font-size: 0.88rem; }
+
+@media (max-width: 900px) {
+  main .quick-deals,
+  main .deal-strip-grid,
+  main .destination-grid,
+  main .activity-grid,
+  main .feature-grid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 0.4rem;
+    margin-inline: -1rem;
+    padding-inline: 1rem;
+    scrollbar-width: none;
+  }
+  main .quick-deals::-webkit-scrollbar,
+  main .deal-strip-grid::-webkit-scrollbar,
+  main .destination-grid::-webkit-scrollbar,
+  main .activity-grid::-webkit-scrollbar,
+  main .feature-grid::-webkit-scrollbar { display: none; }
+  main .quick-deals > *,
+  main .destination-grid > *,
+  main .activity-grid > *,
+  main .feature-grid > * { flex: 0 0 min(62vw, 240px); scroll-snap-align: start; }
+  main .deal-strip-grid > * { flex: 0 0 min(72vw, 260px); scroll-snap-align: start; }
+  main .instant-deals .deal-banner { flex-direction: row; align-items: center; }
+  main .instant-deals .deal-banner h2 { font-size: 1.05rem; }
+}

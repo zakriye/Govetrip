@@ -863,17 +863,17 @@ function initCookieConsent() {
   const translations = {
     fi: {
       settings: 'Evästeasetukset', title: 'Yksityisyysvalintasi',
-      description: 'Käytämme välttämätöntä selaintallennusta asetustesi muistamiseen. Luvallasi Travelpayoutsin lentohintawidget voidaan ladata.',
+      description: 'Käytämme välttämätöntä selaintallennusta asetustesi muistamiseen. Luvallasi GoVeTripin lentohintawidget voidaan ladata.',
       necessary: 'Vain välttämättömät', accept: 'Hyväksy kaikki', customize: 'Muokkaa valintoja',
-      affiliate: 'Lentohintawidget', affiliateDescription: 'Salli Travelpayoutsin lentohintawidgetin lataus.',
+      affiliate: 'Lentohintawidget', affiliateDescription: 'Salli GoVeTripin lentohintawidgetin lataus.',
       save: 'Tallenna valinnat', privacy: 'Tietosuojaseloste', required: 'Aina käytössä',
       necessaryStorage: 'Välttämätön tallennus', storageError: 'Valintaa ei voitu tallentaa. Tarkista selaimen tallennusasetukset.'
     },
     en: {
       settings: 'Cookie settings', title: 'Your privacy choices',
-      description: 'We use necessary browser storage to remember your settings. With your permission, the Travelpayouts flight widget may be loaded.',
+      description: 'We use necessary browser storage to remember your settings. With your permission, the GoVeTrip flight widget may be loaded.',
       necessary: 'Necessary only', accept: 'Accept all', customize: 'Customize choices',
-      affiliate: 'Flight price widget', affiliateDescription: 'Allow the Travelpayouts flight price widget to load.',
+      affiliate: 'Flight price widget', affiliateDescription: 'Allow the GoVeTrip flight price widget to load.',
       save: 'Save choices', privacy: 'Privacy policy', required: 'Always on',
       necessaryStorage: 'Necessary storage', storageError: 'We could not save your choice. Check your browser storage settings.'
     }

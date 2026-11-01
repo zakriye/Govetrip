@@ -1,7 +1,6 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  RewriteCond %{HTTP_HOST} ^govetrip\.com$ [NC,OR]
-  RewriteCond %{HTTPS} off
+  RewriteCond %{HTTP_HOST} ^govetrip\.com$ [NC]
   RewriteRule ^(.*)$ https://www.govetrip.com/$1 [R=301,L]
 </IfModule>
 

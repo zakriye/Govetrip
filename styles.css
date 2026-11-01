@@ -588,8 +588,7 @@ select:focus {
 }
 
 .thumb-three {
-  position: relative;
-  background: linear-gradient(135deg, rgba(47, 176, 174, 0.22), rgba(44, 118, 160, 0.08)), url('assets/bangkok-skyline.jpg') center/cover no-repeat;
+  background: linear-gradient(135deg, rgba(47, 176, 174, 0.12), rgba(44, 118, 160, 0.05)), url('https://images.unsplash.com/photo-1563492065599-3520f775eeed?auto=format&fit=crop&w=600&q=70') center/cover no-repeat;
 }
 
 .image-credit {

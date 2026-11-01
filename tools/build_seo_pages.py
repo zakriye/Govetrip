@@ -89,7 +89,7 @@ def head(title, desc, path, extra_ld, robots='index,follow'):
         '<meta property="og:url" content="%(u)s" /><meta property="og:image" content="%(s)s/assets/bangkok-skyline.jpg" />\n'
         '<meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content="%(t)s" />\n'
         '<meta name="twitter:description" content="%(d)s" />\n'
-        '<link rel="stylesheet" href="/styles.css?v=lang22-20261102" />\n%(ld)s\n</head>\n'
+        '<link rel="stylesheet" href="/styles.css?v=lang23-20261102" />\n%(ld)s\n</head>\n'
     ) % {'t': escape(title), 'd': escape(desc), 'r': robots, 'u': url, 's': SITE, 'ld': ld}
 
 

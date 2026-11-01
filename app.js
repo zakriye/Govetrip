@@ -1501,3 +1501,71 @@ window.addEventListener('gvt-flight-deals-ready', initFlightDealLinks);
   };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
 })();
+(function initAppInstall() {
+  const head = document.head;
+  const add = (tag, attrs) => { const el = document.createElement(tag); Object.keys(attrs).forEach((k) => el.setAttribute(k, attrs[k])); head.appendChild(el); };
+  if (!document.querySelector('link[rel="manifest"]')) add('link', { rel: 'manifest', href: '/manifest.webmanifest' });
+  if (!document.querySelector('link[rel="apple-touch-icon"]')) add('link', { rel: 'apple-touch-icon', href: '/assets/apple-touch-icon.png' });
+  if (!document.querySelector('meta[name="theme-color"]')) add('meta', { name: 'theme-color', content: '#3b1a7a' });
+  if ('serviceWorker' in navigator && location.protocol === 'https:') {
+    window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {}));
+  }
+
+  const T = {
+    en: ['Get the GoVeTrip app', 'Install on Android', 'Add to iPhone', 'Tap the menu (⋮) and choose "Install app" or "Add to Home screen".', 'Tap the Share button, then choose "Add to Home Screen".', 'Already installed'],
+    fi: ['Lataa GoVeTrip-sovellus', 'Asenna Androidille', 'Lisää iPhoneen', 'Avaa selaimen valikko (⋮) ja valitse "Asenna sovellus" tai "Lisää aloitusnäyttöön".', 'Paina Jaa-painiketta ja valitse "Lisää Koti-valikkoon".', 'Asennettu'],
+    sv: ['Skaffa GoVeTrip-appen', 'Installera på Android', 'Lägg till på iPhone', 'Öppna webbläsarmenyn (⋮) och välj "Installera app" eller "Lägg till på startskärmen".', 'Tryck på Dela och välj "Lägg till på hemskärmen".', 'Redan installerad'],
+    no: ['Last ned GoVeTrip-appen', 'Installer på Android', 'Legg til på iPhone', 'Åpne nettlesermenyen (⋮) og velg "Installer app" eller "Legg til på startskjermen".', 'Trykk på Del og velg "Legg til på Hjem-skjerm".', 'Allerede installert'],
+    da: ['Hent GoVeTrip-appen', 'Installer på Android', 'Tilføj til iPhone', 'Åbn browsermenuen (⋮) og vælg "Installer app" eller "Føj til startskærm".', 'Tryk på Del og vælg "Føj til hjemmeskærm".', 'Allerede installeret'],
+    de: ['GoVeTrip-App holen', 'Auf Android installieren', 'Zum iPhone hinzufügen', 'Öffne das Browsermenü (⋮) und wähle "App installieren" oder "Zum Startbildschirm hinzufügen".', 'Tippe auf Teilen und wähle "Zum Home-Bildschirm".', 'Bereits installiert'],
+    fr: ["Obtenir l'appli GoVeTrip", 'Installer sur Android', "Ajouter à l'iPhone", 'Ouvrez le menu du navigateur (⋮) et choisissez "Installer l\'application" ou "Ajouter à l\'écran d\'accueil".', 'Touchez Partager puis "Sur l\'écran d\'accueil".', 'Déjà installée'],
+    es: ['Descarga la app de GoVeTrip', 'Instalar en Android', 'Añadir al iPhone', 'Abre el menú del navegador (⋮) y elige "Instalar app" o "Añadir a la pantalla de inicio".', 'Toca Compartir y elige "Añadir a pantalla de inicio".', 'Ya instalada'],
+    it: ["Scarica l'app GoVeTrip", 'Installa su Android', 'Aggiungi a iPhone', 'Apri il menu del browser (⋮) e scegli "Installa app" o "Aggiungi a schermata Home".', 'Tocca Condividi e scegli "Aggiungi a schermata Home".', 'Già installata'],
+    nl: ['Download de GoVeTrip-app', 'Installeren op Android', 'Toevoegen aan iPhone', 'Open het browsermenu (⋮) en kies "App installeren" of "Toevoegen aan startscherm".', 'Tik op Delen en kies "Zet op beginscherm".', 'Al geïnstalleerd'],
+    pl: ['Pobierz aplikację GoVeTrip', 'Zainstaluj na Androidzie', 'Dodaj na iPhone', 'Otwórz menu przeglądarki (⋮) i wybierz "Zainstaluj aplikację" lub "Dodaj do ekranu głównego".', 'Dotknij Udostępnij i wybierz "Do ekranu początkowego".', 'Już zainstalowana'],
+    pt: ['Obtenha a app GoVeTrip', 'Instalar no Android', 'Adicionar ao iPhone', 'Abra o menu do navegador (⋮) e escolha "Instalar app" ou "Adicionar ao ecrã inicial".', 'Toque em Partilhar e escolha "Adicionar ao ecrã principal".', 'Já instalada']
+  };
+  const lang = (document.documentElement.lang || 'en').slice(0, 2).toLowerCase();
+  const t = T[lang] || T.en;
+  const footer = document.querySelector('.site-footer');
+  if (!footer || footer.querySelector('.app-download')) return;
+
+  const standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+  const box = document.createElement('div');
+  box.className = 'container app-download';
+  const title = document.createElement('h3');
+  title.textContent = t[0];
+  const row = document.createElement('div');
+  row.className = 'app-badges';
+  const hint = document.createElement('p');
+  hint.className = 'app-hint';
+  hint.hidden = true;
+
+  const android = document.createElement('button');
+  android.type = 'button';
+  android.className = 'app-badge';
+  android.innerHTML = '<svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path fill="currentColor" d="M3.6 2.3c-.2.2-.3.6-.3 1v17.4c0 .4.1.8.3 1l9.7-9.7L3.6 2.3zm10.4 8.7 2.6-2.6L5.9 2.2l8.1 8.8zm0 2 -8.1 8.8 10.7-6.2L14 13zm3.6-1.6 3.1 1.8c.9.5.9 1.3 0 1.8l-3.1 1.8-2.9-2.7 2.9-2.7z"/></svg><span><small></small><b></b></span>';
+  android.querySelector('b').textContent = t[1];
+  const ios = document.createElement('button');
+  ios.type = 'button';
+  ios.className = 'app-badge';
+  ios.innerHTML = '<svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path fill="currentColor" d="M16.4 12.6c0-2.2 1.8-3.2 1.9-3.3-1-1.5-2.6-1.7-3.2-1.7-1.4-.1-2.7.8-3.4.8-.7 0-1.8-.8-3-.8-1.5 0-3 .9-3.800 2.300-1.600 2.800-.4 7 1.200 9.300.800 1.100 1.700 2.400 2.900 2.300 1.200 0 1.600-.7 3-.7s1.800.7 3 .7 2-1.100 2.800-2.200c.9-1.300 1.200-2.500 1.200-2.600-.1 0-2.600-1-2.600-3.900zM14.100 5.800c.600-.8 1.100-1.900.9-3-.9 0-2.100.6-2.700 1.400-.6.700-1.100 1.800-1 2.900 1.100.1 2.200-.5 2.800-1.300z"/></svg><span><small></small><b></b></span>';
+  ios.querySelector('b').textContent = t[2];
+  row.append(android, ios);
+  box.append(title, row, hint);
+
+  let deferred = null;
+  window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferred = e; });
+  window.addEventListener('appinstalled', () => { deferred = null; hint.hidden = false; hint.textContent = t[5]; });
+
+  const show = (msg) => { hint.textContent = msg; hint.hidden = false; };
+  android.addEventListener('click', async () => {
+    if (standalone) return show(t[5]);
+    if (deferred) { deferred.prompt(); try { await deferred.userChoice; } catch (e) {} deferred = null; return; }
+    show(t[3]);
+  });
+  ios.addEventListener('click', () => show(standalone ? t[5] : t[4]));
+
+  const bottom = footer.querySelector('.footer-bottom');
+  footer.insertBefore(box, bottom);
+})();

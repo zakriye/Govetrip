@@ -3566,3 +3566,12 @@ main .activity-card strong { font-size: 0.88rem; }
   main .instant-deals .deal-banner { flex-direction: row; align-items: center; }
   main .instant-deals .deal-banner h2 { font-size: 1.05rem; }
 }
+.city-section h2 { margin: 0 0 0.7rem; font-size: 1.25rem; }
+.city-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem; }
+.city-tile { display: flex; align-items: center; gap: 0.7rem; min-width: 0; min-height: 56px; padding: 0.3rem 0.7rem 0.3rem 0.3rem; border: 1px solid #e4deeb; border-radius: 0.55rem; background: #fff; color: #2d2538; }
+.city-tile:hover { box-shadow: 0 6px 18px rgba(46, 29, 67, 0.12); }
+.city-thumb { width: 72px; height: 46px; flex: 0 0 auto; border-radius: 0.4rem; background-position: center; background-size: cover; }
+.city-copy small { display: block; color: #756a7e; font-size: 0.62rem; letter-spacing: 0.05em; text-transform: uppercase; }
+.city-copy strong { display: block; overflow: hidden; font-size: 0.92rem; text-overflow: ellipsis; white-space: nowrap; }
+.city-all { justify-content: center; background: #f4edff; color: var(--primary); }
+@media (max-width: 600px) { .city-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .city-thumb { width: 56px; } }

@@ -1,3 +1,4 @@
+@font-face{font-family:"Inter Fallback";src:local("Arial");size-adjust:107.4%;ascent-override:90.2%;descent-override:22.5%;line-gap-override:0%}
 :root {
   --bg: #f5f8ff;
   --surface: #ffffff;
@@ -23,7 +24,7 @@ html {
 
 body {
   margin: 0;
-  font-family: "Inter", sans-serif;
+  font-family: "Inter", "Inter Fallback", sans-serif;
   background: linear-gradient(180deg, #f8fbff 0%, #edf4ff 100%);
   color: var(--ink);
 }

@@ -1429,3 +1429,75 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 window.addEventListener('gvt-flight-deals-ready', initFlightDealLinks);
+
+(function initHeaderMenuAndStickySearch() {
+  const start = () => {
+    const header = document.querySelector('.site-header');
+    const shell = header && header.querySelector('.nav-shell');
+    const nav = shell && shell.querySelector('.main-nav');
+    if (!shell || !nav || shell.querySelector('.nav-burger')) return;
+
+    const burger = document.createElement('button');
+    burger.type = 'button';
+    burger.className = 'nav-burger';
+    burger.setAttribute('aria-label', 'Menu');
+    burger.setAttribute('aria-expanded', 'false');
+    burger.innerHTML = '<span></span><span></span><span></span>';
+    shell.insertBefore(burger, shell.firstChild);
+    const backdrop = document.createElement('div');
+    backdrop.className = 'nav-backdrop';
+    header.appendChild(backdrop);
+    const setOpen = (open) => {
+      document.body.classList.toggle('nav-open', open);
+      burger.setAttribute('aria-expanded', String(open));
+    };
+    burger.addEventListener('click', () => setOpen(!document.body.classList.contains('nav-open')));
+    backdrop.addEventListener('click', () => setOpen(false));
+    document.addEventListener('keydown', (event) => { if (event.key === 'Escape') setOpen(false); });
+    nav.addEventListener('click', (event) => { if (event.target.closest('a')) setOpen(false); });
+
+    const card = document.getElementById('search');
+    const from = document.getElementById('pcFrom');
+    const to = document.getElementById('pcTo');
+    const dates = document.getElementById('pcDates');
+    const go = document.querySelector('.pc-go');
+    if (!card || !from || !to || !dates || !go || !('IntersectionObserver' in window)) return;
+
+    const bar = document.createElement('div');
+    bar.className = 'sticky-search';
+    bar.innerHTML = '<button type="button" data-s="from"></button><button type="button" data-s="to"></button><button type="button" data-s="dates"></button><button type="button" class="sticky-go" data-s="go"></button>';
+    const actions = shell.querySelector('.nav-actions');
+    shell.insertBefore(bar, actions && actions.parentNode === shell ? actions : null);
+    const parts = {};
+    bar.querySelectorAll('button').forEach((b) => { parts[b.dataset.s] = b; });
+    const refresh = () => {
+      parts.from.textContent = from.value || from.placeholder;
+      parts.to.textContent = to.value || to.placeholder;
+      parts.dates.textContent = dates.textContent.trim();
+      parts.go.textContent = go.textContent.trim();
+      parts.from.classList.toggle('empty', !from.value);
+      parts.to.classList.toggle('empty', !to.value);
+      parts.dates.classList.toggle('empty', !dates.classList.contains('on'));
+    };
+    const toSearch = (focus) => {
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => { if (focus) focus.click(); if (focus && focus.focus) focus.focus(); }, 450);
+    };
+    bar.addEventListener('click', (event) => {
+      const key = event.target.closest('button')?.dataset.s;
+      if (!key) return;
+      if (key === 'go') {
+        if (to.value && dates.classList.contains('on')) go.click(); else toSearch(to);
+      } else {
+        toSearch({ from, to, dates }[key]);
+      }
+    });
+    const observer = new IntersectionObserver(([entry]) => {
+      const show = !entry.isIntersecting && entry.boundingClientRect.top < 0;
+      if (show) refresh();
+      header.classList.toggle('show-search', show);
+    }, { rootMargin: '-80px 0px 0px 0px' });
+    observer.observe(card);
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+})();

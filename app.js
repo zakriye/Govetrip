@@ -1538,6 +1538,27 @@ window.addEventListener('gvt-flight-deals-ready', initFlightDealLinks);
     const stop = (e) => e.preventDefault();
     document.addEventListener('touchmove', (e) => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
     ['gesturestart', 'gesturechange', 'gestureend'].forEach((n) => document.addEventListener(n, stop));
+    let seen = false;
+    try { seen = sessionStorage.getItem('gvt-splash') === '1'; sessionStorage.setItem('gvt-splash', '1'); } catch (e) { seen = false; }
+    if (!seen && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const splash = document.createElement('div');
+      splash.className = 'gvt-splash';
+      splash.setAttribute('aria-hidden', 'true');
+      splash.innerHTML = '<div class="gvt-splash-inner"><img class="gvt-splash-emblem" src="/assets/splash-emblem.png" alt="">'
+        + '<img class="gvt-splash-word" src="/assets/splash-word.png" alt=""></div>'
+        + '<div class="gvt-splash-plane"><span class="gvt-splash-trail"></span>'
+        + '<svg viewBox="0 0 24 24" width="46" height="46"><path fill="#6d28d9" d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg></div>';
+      document.documentElement.appendChild(splash);
+      document.documentElement.classList.add('gvt-splashing');
+      const done = () => {
+        if (!splash.parentNode) return;
+        splash.classList.add('gvt-splash-out');
+        document.documentElement.classList.remove('gvt-splashing');
+        setTimeout(() => splash.remove(), 450);
+      };
+      setTimeout(done, 3600);
+      splash.addEventListener('click', done);
+    }
     return;
   }
   if (!footer || footer.querySelector('.app-download')) return;

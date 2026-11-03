@@ -1561,13 +1561,13 @@ window.addEventListener('gvt-flight-deals-ready', initFlightDealLinks);
     const stamp = () => { try { localStorage.setItem('gvt-splash-ts', String(Date.now())); } catch (e) { /* ignore */ } };
     let last = 0;
     try { last = Number(localStorage.getItem('gvt-splash-ts') || 0); } catch (e) { last = 0; }
-    if (Date.now() - last > 20000 || /android-app:/.test(document.referrer)) showSplash();
+    if (Date.now() - last > 4000 || /android-app:/.test(document.referrer)) showSplash();
     stamp();
     window.addEventListener('pagehide', stamp);
     let hiddenAt = 0;
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'hidden') { hiddenAt = Date.now(); stamp(); }
-      else if (hiddenAt && Date.now() - hiddenAt > 15000) { showSplash(); hiddenAt = 0; }
+      else if (hiddenAt && Date.now() - hiddenAt > 1500) { showSplash(); hiddenAt = 0; }
     });    return;
   }
   if (!footer || footer.querySelector('.app-download')) return;

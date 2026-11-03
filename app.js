@@ -1538,13 +1538,8 @@ window.addEventListener('gvt-flight-deals-ready', initFlightDealLinks);
     const stop = (e) => e.preventDefault();
     document.addEventListener('touchmove', (e) => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
     ['gesturestart', 'gesturechange', 'gestureend'].forEach((n) => document.addEventListener(n, stop));
-    let seen = false;
-    try {
-      const last = Number(localStorage.getItem('gvt-splash-ts') || 0);
-      seen = Date.now() - last < 300000 && !/android-app:/.test(document.referrer);
-      localStorage.setItem('gvt-splash-ts', String(Date.now()));
-    } catch (e) { seen = false; }
-    if (!seen && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const showSplash = () => {
+      if (document.querySelector('.gvt-splash')) return;
       const splash = document.createElement('div');
       splash.className = 'gvt-splash';
       splash.setAttribute('aria-hidden', 'true');
@@ -1562,8 +1557,18 @@ window.addEventListener('gvt-flight-deals-ready', initFlightDealLinks);
       };
       setTimeout(done, 3600);
       splash.addEventListener('click', done);
-    }
-    return;
+    };
+    const stamp = () => { try { localStorage.setItem('gvt-splash-ts', String(Date.now())); } catch (e) { /* ignore */ } };
+    let last = 0;
+    try { last = Number(localStorage.getItem('gvt-splash-ts') || 0); } catch (e) { last = 0; }
+    if (Date.now() - last > 20000 || /android-app:/.test(document.referrer)) showSplash();
+    stamp();
+    window.addEventListener('pagehide', stamp);
+    let hiddenAt = 0;
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') { hiddenAt = Date.now(); stamp(); }
+      else if (hiddenAt && Date.now() - hiddenAt > 15000) { showSplash(); hiddenAt = 0; }
+    });    return;
   }
   if (!footer || footer.querySelector('.app-download')) return;
   const box = document.createElement('div');

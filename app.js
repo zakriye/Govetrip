@@ -1539,7 +1539,11 @@ window.addEventListener('gvt-flight-deals-ready', initFlightDealLinks);
     document.addEventListener('touchmove', (e) => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
     ['gesturestart', 'gesturechange', 'gestureend'].forEach((n) => document.addEventListener(n, stop));
     let seen = false;
-    try { seen = sessionStorage.getItem('gvt-splash') === '1'; sessionStorage.setItem('gvt-splash', '1'); } catch (e) { seen = false; }
+    try {
+      const last = Number(localStorage.getItem('gvt-splash-ts') || 0);
+      seen = Date.now() - last < 300000 && !/android-app:/.test(document.referrer);
+      localStorage.setItem('gvt-splash-ts', String(Date.now()));
+    } catch (e) { seen = false; }
     if (!seen && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       const splash = document.createElement('div');
       splash.className = 'gvt-splash';

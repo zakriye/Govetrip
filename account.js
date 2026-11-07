@@ -17,7 +17,11 @@
       done: 'Saved', err: 'Something went wrong. Please try again.', invalid_credentials: 'Wrong email or password.',
       email_taken: 'This email is already registered.', weak_password: 'Password must be at least 8 characters.',
       invalid_email: 'Please enter a valid email.', rate_limited: 'Too many attempts. Try again later.', close: 'Close',
-      needLogin: 'Please log in to view your account.'
+      needLogin: 'Please log in to view your account.',
+      alerts: 'Price alerts', alertsInfo: 'We email you when the cheapest flight of the month drops. Leave the target empty to be told about drops of 5% or more.',
+      alFrom: 'From (e.g. HEL)', alTo: 'To (e.g. BKK)', alMonth: 'Month', alTarget: 'Target price (optional)', alAdd: 'Create alert',
+      alNow: 'Now', alMax: 'You can have up to 10 alerts.', invalid_alert: 'Check the airport codes (3 letters) and choose a future month.',
+      alert_limit: 'You already have 10 alerts. Remove one first.'
     },
     fi: {
       signin: 'Kirjaudu', profile: 'Profiili', save: 'Tallenna toivelistalle', saved: 'Tallennettu toivelistalle',
@@ -34,7 +38,11 @@
       done: 'Tallennettu', err: 'Jokin meni pieleen. Yritä uudelleen.', invalid_credentials: 'Väärä sähköposti tai salasana.',
       email_taken: 'Sähköposti on jo rekisteröity.', weak_password: 'Salasanan on oltava vähintään 8 merkkiä.',
       invalid_email: 'Anna kelvollinen sähköposti.', rate_limited: 'Liian monta yritystä. Yritä myöhemmin.', close: 'Sulje',
-      needLogin: 'Kirjaudu sisään nähdäksesi tilisi.'
+      needLogin: 'Kirjaudu sisään nähdäksesi tilisi.',
+      alerts: 'Hintahälytykset', alertsInfo: 'Lähetämme sähköpostia, kun kuun halvin lento halpenee. Jätä tavoitehinta tyhjäksi, niin saat ilmoituksen vähintään 5 % laskusta.',
+      alFrom: 'Mistä (esim. HEL)', alTo: 'Minne (esim. BKK)', alMonth: 'Kuukausi', alTarget: 'Tavoitehinta (valinnainen)', alAdd: 'Luo hälytys',
+      alNow: 'Nyt', alMax: 'Voit luoda enintään 10 hälytystä.', invalid_alert: 'Tarkista lentokenttäkoodit (3 kirjainta) ja valitse tuleva kuukausi.',
+      alert_limit: 'Sinulla on jo 10 hälytystä. Poista ensin yksi.'
     }
   };
   var lang = (document.documentElement.lang || 'en').slice(0, 2);
@@ -42,7 +50,7 @@
   function t(k) { return L[k] || T.en[k] || k; }
   function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; }
 
-  var state = { user: null, wishlist: [], searches: [], googleClientId: '', ready: false };
+  var state = { user: null, wishlist: [], searches: [], alerts: [], googleClientId: '', ready: false };
   var listeners = [];
 
   function api(body) {
@@ -52,7 +60,7 @@
   }
   function apply(d) {
     if (d && !d.error) {
-      if ('user' in d) { state.user = d.user; state.wishlist = d.wishlist || []; state.searches = d.searches || []; }
+      if ('user' in d) { state.user = d.user; state.wishlist = d.wishlist || []; state.searches = d.searches || []; state.alerts = d.alerts || []; }
       if (d.googleClientId != null) state.googleClientId = d.googleClientId;
     }
     state.ready = true; render();
@@ -102,7 +110,7 @@
     }
     var u = state.user;
     menu.innerHTML = '<div class="acc-menu-head"><strong>' + esc(u.name || u.email) + '</strong><small>' + esc(u.email) + '</small></div>' +
-      '<a href="account.html#wishlist">' + esc(t('wishlist')) + '</a><a href="account.html#searches">' + esc(t('searches')) + '</a>' +
+      '<a href="account.html#wishlist">' + esc(t('wishlist')) + '</a><a href="account.html#searches">' + esc(t('searches')) + '</a><a href="account.html#alerts">' + esc(t('alerts')) + '</a>' +
       '<a href="account.html">' + esc(t('account')) + '</a><button type="button" data-out>' + esc(t('logout')) + '</button>';
     menu.querySelector('[data-out]').addEventListener('click', logout);
     menu.hidden = !menu.hidden;
@@ -199,11 +207,22 @@
       if (!state.ready) { root.innerHTML = ''; return; }
       if (!state.user) { root.innerHTML = '<h1>' + esc(t('account')) + '</h1><p>' + esc(t('needLogin')) + '</p><button class="acc-primary acc-inline" type="button" data-in>' + esc(t('signin')) + '</button>'; root.querySelector('[data-in]').addEventListener('click', function () { openAuth('login'); }); return; }
       var tab = (location.hash || '#wishlist').slice(1);
-      if (['wishlist', 'searches', 'settings'].indexOf(tab) < 0) tab = 'wishlist';
+      if (['wishlist', 'searches', 'alerts', 'settings'].indexOf(tab) < 0) tab = 'wishlist';
       var u = state.user, h = '<h1>' + esc(t('hello')) + ', ' + esc(u.name || u.email) + '</h1><div class="acc-tabs">';
-      ['wishlist', 'searches', 'settings'].forEach(function (k) { h += '<a href="#' + k + '" class="' + (k === tab ? 'on' : '') + '">' + esc(t(k)) + '</a>'; });
+      ['wishlist', 'searches', 'alerts', 'settings'].forEach(function (k) { h += '<a href="#' + k + '" class="' + (k === tab ? 'on' : '') + '">' + esc(t(k)) + '</a>'; });
       h += '</div>';
-      if (tab === 'wishlist') {
+      if (tab === 'alerts') {
+        var nowM = new Date().toISOString().slice(0, 7);
+        h += '<p>' + esc(t('alertsInfo')) + '</p>' +
+          (state.alerts.length ? '<ul class="acc-list">' + state.alerts.map(function (a) {
+            return '<li><span>' + esc(a.origin + ' → ' + a.dest + ' · ' + a.month + (a.target ? ' · ≤ ' + a.target + ' ' + a.currency.toUpperCase() : '') + (a.last_price ? ' · ' + t('alNow') + ' ' + Math.round(a.last_price) + ' ' + a.currency.toUpperCase() : '')) + '</span><button type="button" data-arm="' + a.id + '">' + esc(t('remove')) + '</button></li>';
+          }).join('') + '</ul>' : '<p>' + esc(t('empty')) + '</p>') +
+          '<form class="acc-form" data-alert><label>' + esc(t('alFrom')) + '<input name="o" maxlength="3" value="' + esc(u.homeAirport) + '" required /></label><label>' + esc(t('alTo')) + '<input name="d" maxlength="3" required /></label>' +
+          '<label>' + esc(t('alMonth')) + '<input name="m" type="month" min="' + nowM + '" value="' + nowM + '" required /></label>' +
+          '<label>' + esc(t('alTarget')) + '<input name="p" type="number" min="1" step="1" inputmode="numeric" /></label>' +
+          '<label>€ <select name="c"><option value="eur">EUR</option><option value="usd">USD</option><option value="gbp">GBP</option><option value="sek">SEK</option><option value="nok">NOK</option><option value="dkk">DKK</option><option value="pln">PLN</option></select></label>' +
+          '<div class="acc-msg"></div><button class="acc-primary">' + esc(t('alAdd')) + '</button><small>' + esc(t('alMax')) + '</small></form>';
+      } else if (tab === 'wishlist') {
         h += state.wishlist.length ? '<ul class="acc-list">' + state.wishlist.map(function (w) { return '<li><a href="' + esc(w.url.replace(/^\//, '')) + '">' + esc(w.title) + '</a><button type="button" data-rm="' + w.id + '">' + esc(t('remove')) + '</button></li>'; }).join('') + '</ul>' : '<p>' + esc(t('empty')) + '</p>';
       } else if (tab === 'searches') {
         h += state.searches.length ? '<ul class="acc-list">' + state.searches.map(function (s) { return '<li><a href="' + esc(s.url.replace(/^\//, '')) + '">' + esc(s.label) + '</a><small>' + esc((s.created_at || '').slice(0, 10)) + '</small></li>'; }).join('') + '</ul><button type="button" class="acc-link" data-clr>' + esc(t('clear')) + '</button>' : '<p>' + esc(t('empty')) + '</p>';
@@ -213,6 +232,14 @@
       root.innerHTML = h;
       root.querySelectorAll('[data-rm]').forEach(function (b) { b.addEventListener('click', function () { api({ action: 'wish_remove', id: +b.getAttribute('data-rm') }).then(apply); }); });
       var c = root.querySelector('[data-clr]'); if (c) c.addEventListener('click', function () { api({ action: 'search_clear' }).then(apply); });
+      root.querySelectorAll('[data-arm]').forEach(function (b) { b.addEventListener('click', function () { api({ action: 'alert_remove', id: +b.getAttribute('data-arm') }).then(apply); }); });
+      var af = root.querySelector('form[data-alert]'); if (af) af.addEventListener('submit', function (e) {
+        e.preventDefault();
+        api({ action: 'alert_add', origin: af.o.value.trim(), dest: af.d.value.trim(), month: af.m.value, target: af.p.value, currency: af.c.value }).then(function (d) {
+          if (d.error) { af.querySelector('.acc-msg').textContent = msg(d); return; }
+          apply(d);
+        });
+      });
       var dl = root.querySelector('[data-del]'); if (dl) dl.addEventListener('click', function () { if (confirm(t('delConfirm'))) api({ action: 'delete_account', confirm: true }).then(function () { location.href = 'index.html'; }); });
       var f = root.querySelector('form'); if (f) f.addEventListener('submit', function (e) {
         e.preventDefault();

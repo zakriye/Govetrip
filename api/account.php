@@ -101,6 +101,21 @@ function db(): PDO
         user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
         expires_at INTEGER NOT NULL
     )');
+    $pdo->exec('CREATE TABLE IF NOT EXISTS alerts (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        origin TEXT NOT NULL,
+        dest TEXT NOT NULL,
+        month TEXT NOT NULL,
+        currency TEXT NOT NULL DEFAULT \'eur\',
+        target REAL,
+        last_price REAL,
+        notified_price REAL,
+        notified_at TEXT,
+        checked_at TEXT,
+        created_at TEXT NOT NULL,
+        UNIQUE(user_id, origin, dest, month)
+    )');
     $pdo->exec('CREATE TABLE IF NOT EXISTS attempts (
         ip TEXT NOT NULL,
         ts INTEGER NOT NULL
@@ -238,7 +253,60 @@ function snapshot(array $u): array
     $w->execute([$u['id']]);
     $s = $pdo->prepare('SELECT id, kind, label, url, created_at FROM searches WHERE user_id = ? ORDER BY id DESC LIMIT 30');
     $s->execute([$u['id']]);
-    return ['user' => publicUser($u), 'wishlist' => $w->fetchAll(), 'searches' => $s->fetchAll()];
+    $a = $pdo->prepare('SELECT id, origin, dest, month, currency, target, last_price, notified_at FROM alerts WHERE user_id = ? ORDER BY month, id');
+    $a->execute([$u['id']]);
+    return ['user' => publicUser($u), 'wishlist' => $w->fetchAll(), 'searches' => $s->fetchAll(), 'alerts' => $a->fetchAll()];
+}
+
+function fetchMonthMin(string $origin, string $dest, string $month, string $currency): ?array
+{
+    $token = config('travelpayouts_token');
+    if ($token === '') {
+        return null;
+    }
+    $url = 'https://api.travelpayouts.com/v2/prices/month-matrix?' . http_build_query([
+        'currency' => $currency, 'show_to_affiliates' => 'true', 'origin' => $origin,
+        'destination' => $dest, 'month' => $month . '-01',
+    ]);
+    $ch = curl_init($url);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true, CURLOPT_CONNECTTIMEOUT => 5, CURLOPT_TIMEOUT => 15,
+        CURLOPT_ENCODING => '', CURLOPT_HTTPHEADER => ['X-Access-Token: ' . $token],
+    ]);
+    $body = curl_exec($ch);
+    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    $data = is_string($body) ? json_decode($body, true) : null;
+    if ($code !== 200 || !is_array($data) || empty($data['success']) || !is_array($data['data'] ?? null)) {
+        return null;
+    }
+    $best = null;
+    foreach ($data['data'] as $row) {
+        if (is_array($row) && isset($row['depart_date']) && is_numeric($row['value'] ?? null)
+            && ($best === null || (float)$row['value'] < $best['price'])) {
+            $best = ['price' => (float)$row['value'], 'date' => (string)$row['depart_date']];
+        }
+    }
+    return $best;
+}
+
+function alertMail(array $user, array $al, array $best): void
+{
+    $fi = ($user['lang'] ?? '') === 'fi';
+    $prefix = $fi ? '/fi' : '';
+    $d = substr($best['date'], 8, 2) . substr($best['date'], 5, 2);
+    $search = 'https://www.aviasales.com/search/' . $al['origin'] . $d . $al['dest'] . '1?currency=' . $al['currency'];
+    $link = 'https://aviasales.tpm.lv/kG8FZBWw?u=' . rawurlencode($search);
+    $price = number_format($best['price'], 0, '.', ' ') . ' ' . strtoupper($al['currency']);
+    $route = $al['origin'] . ' → ' . $al['dest'];
+    if ($fi) {
+        $subject = "Hintahälytys: $route nyt $price";
+        $text = "Hei,\n\nreitin $route hinta on laskenut: halvin lento kuussa {$al['month']} on nyt $price ({$best['date']}).\n\nKatso tarjous: $link\n\nHinnat muuttuvat nopeasti. Voit hallita hälytyksiäsi: https://www.govetrip.com$prefix/account.html#alerts\n\nGoVeTrip";
+    } else {
+        $subject = "Price alert: $route now $price";
+        $text = "Hello,\n\nthe price for $route has dropped: the cheapest flight in {$al['month']} is now $price ({$best['date']}).\n\nView the deal: $link\n\nPrices change fast. Manage your alerts: https://www.govetrip.com$prefix/account.html#alerts\n\nGoVeTrip";
+    }
+    @mail($user['email'], '=?UTF-8?B?' . base64_encode($subject) . '?=', $text, "From: GoVeTrip <noreply@govetrip.com>\r\nContent-Type: text/plain; charset=UTF-8");
 }
 
 function verifyGoogleToken(string $credential): ?array
@@ -311,6 +379,47 @@ try {
         }
         fclose($fh);
         exit;
+    }
+
+    if ($action === 'cron_alerts') {
+        $key = config('admin_key');
+        if ($key === '' || !hash_equals($key, (string)($_GET['key'] ?? ''))) {
+            out(['error' => 'forbidden'], 403);
+        }
+        $pdo = db();
+        $pdo->prepare('DELETE FROM alerts WHERE month < ?')->execute([gmdate('Y-m', strtotime('-1 month'))]);
+        $rows = $pdo->query('SELECT a.*, u.email, u.lang FROM alerts a JOIN users u ON u.id = a.user_id ORDER BY a.id')->fetchAll();
+        $cache = [];
+        $checked = 0;
+        $sent = 0;
+        foreach ($rows as $al) {
+            $ck = $al['origin'] . $al['dest'] . $al['month'] . $al['currency'];
+            if (!array_key_exists($ck, $cache)) {
+                if (count($cache) >= 200) {
+                    continue;
+                }
+                $cache[$ck] = fetchMonthMin($al['origin'], $al['dest'], $al['month'], $al['currency']);
+            }
+            $best = $cache[$ck];
+            if ($best === null) {
+                continue;
+            }
+            $checked++;
+            $price = $best['price'];
+            $notify = false;
+            if ($al['target'] !== null) {
+                $notify = $price <= (float)$al['target'] && ($al['notified_price'] === null || $price < (float)$al['notified_price']);
+            } elseif ($al['last_price'] !== null) {
+                $notify = $price <= (float)$al['last_price'] * 0.95;
+            }
+            if ($notify) {
+                alertMail($al, $al, $best);
+                $sent++;
+                $pdo->prepare('UPDATE alerts SET notified_price = ?, notified_at = ? WHERE id = ?')->execute([$price, now(), $al['id']]);
+            }
+            $pdo->prepare('UPDATE alerts SET last_price = ?, checked_at = ? WHERE id = ?')->execute([$price, now(), $al['id']]);
+        }
+        out(['ok' => true, 'alerts' => count($rows), 'checked' => $checked, 'sent' => $sent]);
     }
 
     startSession();
@@ -481,6 +590,32 @@ try {
         case 'search_clear':
             $user = requireUser();
             db()->prepare('DELETE FROM searches WHERE user_id = ?')->execute([$user['id']]);
+            out(snapshot($user));
+
+        case 'alert_add':
+            $user = requireUser();
+            $origin = strtoupper(cleanText($input['origin'] ?? '', 3));
+            $dest = strtoupper(cleanText($input['dest'] ?? '', 3));
+            $month = cleanText($input['month'] ?? '', 7);
+            $currency = strtolower(cleanText($input['currency'] ?? 'eur', 3));
+            $target = isset($input['target']) && is_numeric($input['target']) && (float)$input['target'] > 0 ? round((float)$input['target'], 2) : null;
+            if (!preg_match('/^[A-Z]{3}$/', $origin) || !preg_match('/^[A-Z]{3}$/', $dest) || $origin === $dest
+                || !preg_match('/^\d{4}-(0[1-9]|1[0-2])$/', $month) || $month < gmdate('Y-m') || !preg_match('/^[a-z]{3}$/', $currency)) {
+                out(['error' => 'invalid_alert'], 422);
+            }
+            $n = db()->prepare('SELECT COUNT(*) FROM alerts WHERE user_id = ?');
+            $n->execute([$user['id']]);
+            if ((int)$n->fetchColumn() >= 10) {
+                out(['error' => 'alert_limit'], 422);
+            }
+            $first = fetchMonthMin($origin, $dest, $month, $currency);
+            db()->prepare('INSERT OR REPLACE INTO alerts (user_id, origin, dest, month, currency, target, last_price, created_at) VALUES (?,?,?,?,?,?,?,?)')
+                ->execute([$user['id'], $origin, $dest, $month, $currency, $target, $first['price'] ?? null, now()]);
+            out(snapshot($user));
+
+        case 'alert_remove':
+            $user = requireUser();
+            db()->prepare('DELETE FROM alerts WHERE user_id = ? AND id = ?')->execute([$user['id'], (int)($input['id'] ?? 0)]);
             out(snapshot($user));
 
         case 'delete_account':

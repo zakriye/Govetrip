@@ -285,6 +285,7 @@
       $('#pcPackage').scrollIntoView({ block: 'nearest' });
       return;
     }
+    try { if (window.gvtAccount) window.gvtAccount.recordSearch(state.from + ' → ' + state.to + ' · ' + state.depart + (oneway() ? '' : ' – ' + state.ret), '/#priceCalendar'); } catch (x) {}
     var w = null;
     try { w = window.open(url, '_blank'); } catch (x) {}
     if (!w) window.location.href = url;

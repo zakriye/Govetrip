@@ -4,11 +4,14 @@ Check your internet connection and try again.
 GoVeTrip | Offline
 Lentohaku löytyy
 Lentohaku | GoVeTrip
+My account | GoVeTrip
 No connection
 Retry
+Your GoVeTrip account: wishlist, recent searches and settings.
 etusivulta
 https://www.govetrip.com/
 https://www.govetrip.com/about.html
+https://www.govetrip.com/account.html
 https://www.govetrip.com/affiliate-disclosure.html
 https://www.govetrip.com/assets/bangkok-skyline.jpg
 https://www.govetrip.com/cars.html

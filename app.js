@@ -1389,6 +1389,14 @@ function initFlightDealLinks() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  (() => {
+    const me = document.querySelector('script[src*="app.js"]');
+    if (!me || document.querySelector('script[data-account]')) return;
+    const s = document.createElement('script');
+    s.src = me.getAttribute('src').replace('app.js', 'account.js');
+    s.defer = true; s.dataset.account = '1';
+    document.head.appendChild(s);
+  })();
   document.querySelectorAll('input[aria-label]').forEach((input) => { input.dataset.field = input.getAttribute('aria-label'); });
   initCurrencyAndLanguage();
   initCookieConsent();

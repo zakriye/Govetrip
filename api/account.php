@@ -292,21 +292,36 @@ function fetchMonthMin(string $origin, string $dest, string $month, string $curr
 
 function alertMail(array $user, array $al, array $best): void
 {
-    $fi = ($user['lang'] ?? '') === 'fi';
-    $prefix = $fi ? '/fi' : '';
+    $tpl = [
+        'en' => ['Price alert: {route} now {price}', "Hello,\n\nthe price for {route} has dropped: the cheapest flight in {month} is now {price} ({date}).\n\nView the deal: {link}\n\nPrices change fast. Manage your alerts: {manage}\n\nGoVeTrip"],
+        'fi' => ['Hintahälytys: {route} nyt {price}', "Hei,\n\nreitin {route} hinta on laskenut: halvin lento kuussa {month} on nyt {price} ({date}).\n\nKatso tarjous: {link}\n\nHinnat muuttuvat nopeasti. Voit hallita hälytyksiäsi: {manage}\n\nGoVeTrip"],
+        'sv' => ['Prisbevakning: {route} nu {price}', "Hej,\n\npriset för {route} har sjunkit: det billigaste flyget i {month} kostar nu {price} ({date}).\n\nSe erbjudandet: {link}\n\nPriserna ändras snabbt. Hantera dina bevakningar: {manage}\n\nGoVeTrip"],
+        'no' => ['Prisvarsel: {route} nå {price}', "Hei,\n\nprisen for {route} har falt: billigste fly i {month} koster nå {price} ({date}).\n\nSe tilbudet: {link}\n\nPrisene endres raskt. Administrer varslene dine: {manage}\n\nGoVeTrip"],
+        'da' => ['Prisalarm: {route} nu {price}', "Hej,\n\nprisen for {route} er faldet: det billigste fly i {month} koster nu {price} ({date}).\n\nSe tilbuddet: {link}\n\nPriserne ændrer sig hurtigt. Administrer dine alarmer: {manage}\n\nGoVeTrip"],
+        'de' => ['Preisalarm: {route} jetzt {price}', "Hallo,\n\nder Preis für {route} ist gesunken: Der günstigste Flug im {month} kostet jetzt {price} ({date}).\n\nAngebot ansehen: {link}\n\nPreise ändern sich schnell. Alarme verwalten: {manage}\n\nGoVeTrip"],
+        'fr' => ['Alerte de prix : {route} maintenant {price}', "Bonjour,\n\nle prix de {route} a baissé : le vol le moins cher en {month} est maintenant à {price} ({date}).\n\nVoir l'offre : {link}\n\nLes prix changent vite. Gérez vos alertes : {manage}\n\nGoVeTrip"],
+        'es' => ['Alerta de precio: {route} ahora {price}', "Hola,\n\nel precio de {route} ha bajado: el vuelo más barato de {month} cuesta ahora {price} ({date}).\n\nVer la oferta: {link}\n\nLos precios cambian rápido. Gestiona tus alertas: {manage}\n\nGoVeTrip"],
+        'it' => ['Avviso di prezzo: {route} ora {price}', "Ciao,\n\nil prezzo per {route} è sceso: il volo più economico di {month} costa ora {price} ({date}).\n\nVedi l'offerta: {link}\n\nI prezzi cambiano in fretta. Gestisci i tuoi avvisi: {manage}\n\nGoVeTrip"],
+        'nl' => ['Prijsalert: {route} nu {price}', "Hallo,\n\nde prijs voor {route} is gedaald: de goedkoopste vlucht in {month} kost nu {price} ({date}).\n\nBekijk het aanbod: {link}\n\nPrijzen veranderen snel. Beheer je alerts: {manage}\n\nGoVeTrip"],
+        'pl' => ['Alert cenowy: {route} teraz {price}', "Cześć,\n\ncena trasy {route} spadła: najtańszy lot w {month} kosztuje teraz {price} ({date}).\n\nZobacz ofertę: {link}\n\nCeny szybko się zmieniają. Zarządzaj alertami: {manage}\n\nGoVeTrip"],
+        'pt' => ['Alerta de preço: {route} agora {price}', "Olá,\n\no preço de {route} desceu: o voo mais barato em {month} custa agora {price} ({date}).\n\nVer a oferta: {link}\n\nOs preços mudam depressa. Gerir os seus alertas: {manage}\n\nGoVeTrip"],
+    ];
+    $code = substr((string)($user['lang'] ?? ''), 0, 2);
+    if (!isset($tpl[$code])) {
+        $code = 'en';
+    }
+    $prefix = $code === 'en' ? '' : '/' . $code;
     $d = substr($best['date'], 8, 2) . substr($best['date'], 5, 2);
     $search = 'https://www.aviasales.com/search/' . $al['origin'] . $d . $al['dest'] . '1?currency=' . $al['currency'];
-    $link = 'https://aviasales.tpm.lv/kG8FZBWw?u=' . rawurlencode($search);
-    $price = number_format($best['price'], 0, '.', ' ') . ' ' . strtoupper($al['currency']);
-    $route = $al['origin'] . ' → ' . $al['dest'];
-    if ($fi) {
-        $subject = "Hintahälytys: $route nyt $price";
-        $text = "Hei,\n\nreitin $route hinta on laskenut: halvin lento kuussa {$al['month']} on nyt $price ({$best['date']}).\n\nKatso tarjous: $link\n\nHinnat muuttuvat nopeasti. Voit hallita hälytyksiäsi: https://www.govetrip.com$prefix/account.html#alerts\n\nGoVeTrip";
-    } else {
-        $subject = "Price alert: $route now $price";
-        $text = "Hello,\n\nthe price for $route has dropped: the cheapest flight in {$al['month']} is now $price ({$best['date']}).\n\nView the deal: $link\n\nPrices change fast. Manage your alerts: https://www.govetrip.com$prefix/account.html#alerts\n\nGoVeTrip";
-    }
-    @mail($user['email'], '=?UTF-8?B?' . base64_encode($subject) . '?=', $text, "From: GoVeTrip <noreply@govetrip.com>\r\nContent-Type: text/plain; charset=UTF-8");
+    $vars = [
+        '{route}' => $al['origin'] . ' → ' . $al['dest'],
+        '{price}' => number_format($best['price'], 0, '.', ' ') . ' ' . strtoupper($al['currency']),
+        '{month}' => $al['month'], '{date}' => $best['date'],
+        '{link}' => 'https://aviasales.tpm.lv/kG8FZBWw?u=' . rawurlencode($search),
+        '{manage}' => 'https://www.govetrip.com' . $prefix . '/account.html#alerts',
+    ];
+    $subject = strtr($tpl[$code][0], $vars);
+    $text = strtr($tpl[$code][1], $vars);    @mail($user['email'], '=?UTF-8?B?' . base64_encode($subject) . '?=', $text, "From: GoVeTrip <noreply@govetrip.com>\r\nContent-Type: text/plain; charset=UTF-8");
 }
 
 function verifyGoogleToken(string $credential): ?array

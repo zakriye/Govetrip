@@ -127,11 +127,6 @@
     }, 200);
   });
   from.addEventListener('blur', function () { setTimeout(function () { sug.hidden = true; }, 150); });
-  fetch('https://ipapi.co/json/').then(function (r) { return r.json(); }).then(function (g) {
-    if (origin || !g.city) return;
-    return fetch('https://autocomplete.travelpayouts.com/places2?term=' + encodeURIComponent(g.city) + '&locale=en&types[]=city').then(function (r) { return r.json(); }).then(function (it) {
-      if (origin || !it.length) return; origin = it[0].code; from.value = it[0].name + ' (' + origin + ')'; load();
-    });
-  }).catch(function () {}).then(function () { if (!origin) { origin = 'HEL'; from.value = 'Helsinki (HEL)'; load(); } });
+  if (!origin) { origin = 'HEL'; from.value = 'Helsinki (HEL)'; load(); }
   render();
 })();

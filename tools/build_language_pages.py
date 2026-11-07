@@ -12,17 +12,22 @@ import re
 from datetime import date
 
 SITE = 'https://www.govetrip.com'
-LANGS = ['fi', 'sv', 'no', 'da', 'de', 'fr', 'es', 'it', 'nl', 'pl', 'pt']
+LANGS = ['fi', 'sv', 'no', 'da', 'de', 'fr', 'es', 'it', 'nl', 'pl', 'pt', 'zh', 'ru']
 LOCALES = {'en': 'en_US', 'fi': 'fi_FI', 'sv': 'sv_SE', 'no': 'nb_NO', 'da': 'da_DK', 'de': 'de_DE', 'fr': 'fr_FR',
-           'es': 'es_ES', 'it': 'it_IT', 'nl': 'nl_NL', 'pl': 'pl_PL', 'pt': 'pt_PT'}
+           'es': 'es_ES', 'it': 'it_IT', 'nl': 'nl_NL', 'pl': 'pl_PL', 'pt': 'pt_PT', 'zh': 'zh_CN', 'ru': 'ru_RU'}
 SKIP = {'govetrip.html'}
 FROM_PRICE = {'fi': 'Alkaen', 'sv': 'Från', 'no': 'Fra', 'da': 'Fra', 'de': 'Ab', 'fr': 'À partir de', 'es': 'Desde', 'it': 'Da', 'nl': 'Vanaf', 'pl': 'Od', 'pt': 'A partir de'}
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TODAY = date.today().isoformat()
 
-REDIRECT = ("<script>try{var l=localStorage.getItem('govetrip.language');"
-            "if(l&&/^(" + '|'.join(LANGS) + ")$/.test(l)&&!document.documentElement.hasAttribute('data-localized'))"
-            "location.replace('/'+l+'/'+(location.pathname.split('/').pop()||'index.html')+location.search+location.hash)}catch(e){}</script>")
+REDIRECT = ("<script>try{"
+            "if(!document.documentElement.hasAttribute('data-localized')&&!/bot|crawler|spider|slurp|bingpreview/i.test(navigator.userAgent)){"
+            "var l=localStorage.getItem('govetrip.language');"
+            "if(!l){var supported=/^(en|" + '|'.join(LANGS) + ")$/;"
+            "l=(navigator.languages||[navigator.language]).map(function(x){return (x||'').toLowerCase().split('-')[0]})"
+            ".find(function(x){return supported.test(x)})||'en'}"
+            "if(/^(" + '|'.join(LANGS) + ")$/.test(l))"
+            "location.replace('/'+l+'/'+(location.pathname.split('/').pop()||'index.html')+location.search+location.hash)}}catch(e){}</script>")
 
 
 def norm(text):
@@ -155,6 +160,7 @@ def build():
             if indexable:
                 extra += '\n    ' + hreflang_block(page)
             body = body.replace('</head>', extra + '\n  </head>', 1)
+            body = re.sub(r'(?m)^[ \t]+$', '', body)
             directory = os.path.join(ROOT, lang)
             os.makedirs(directory, exist_ok=True)
             with open(os.path.join(directory, page), 'w', encoding='utf-8', newline='') as fh:
@@ -162,6 +168,7 @@ def build():
             report[(lang, page)] = stats
         if indexable:
             links = ''.join('<xhtml:link rel="alternate" hreflang="%s" href="%s"/>' % ('nb' if l == 'no' else l, page_url(l, page)) for l in ['en'] + LANGS)
+            links += '<xhtml:link rel="alternate" hreflang="x-default" href="%s"/>' % page_url('en', page)
             for lang in LANGS:
                 sitemap_rows.append('  <url><loc>%s</loc>%s<lastmod>%s</lastmod></url>' % (page_url(lang, page), links, TODAY))
     xml = ('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" '

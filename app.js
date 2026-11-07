@@ -36,7 +36,9 @@ const translations = {
   it: { region: 'Regione rilevata', currency: 'Valuta', language: 'Lingua', location: 'Posizione rilevata dal browser', useLocation: 'Usa la mia posizione', search: 'Cerca offerte', searching: 'Apertura delle migliori offerte di volo…', invalid: 'Aggiungi partenza, destinazione e data di partenza.', returnError: 'La data di ritorno deve essere successiva alla partenza.' },
   nl: { region: 'Gedetecteerde regio', currency: 'Valuta', language: 'Taal', location: 'Locatie gedetecteerd via je browser', useLocation: 'Gebruik mijn locatie', search: 'Aanbiedingen zoeken', searching: 'Beste vluchtaanbiedingen openen…', invalid: 'Voeg vertrek, bestemming en vertrekdatum toe.', returnError: 'De terugdatum moet na de vertrekdatum liggen.' },
   pt: { region: 'Região detetada', currency: 'Moeda', language: 'Idioma', location: 'Localização detetada a partir do navegador', useLocation: 'Usar a minha localização', search: 'Pesquisar ofertas', searching: 'A abrir as melhores ofertas de voos…', invalid: 'Adicione partida, destino e data de partida.', returnError: 'A data de regresso deve ser posterior à data de partida.' },
-  pl: { region: 'Wykryty region', currency: 'Waluta', language: 'Język', location: 'Lokalizacja wykryta przez przeglądarkę', useLocation: 'Użyj mojej lokalizacji', search: 'Szukaj ofert', searching: 'Otwieranie najlepszych ofert lotów…', invalid: 'Dodaj miejsce wylotu, cel i datę wylotu.', returnError: 'Data powrotu musi być późniejsza niż data wylotu.' }
+  pl: { region: 'Wykryty region', currency: 'Waluta', language: 'Język', location: 'Lokalizacja wykryta przez przeglądarkę', useLocation: 'Użyj mojej lokalizacji', search: 'Szukaj ofert', searching: 'Otwieranie najlepszych ofert lotów…', invalid: 'Dodaj miejsce wylotu, cel i datę wylotu.', returnError: 'Data powrotu musi być późniejsza niż data wylotu.' },
+  zh: { region: '地区', currency: '货币', language: '语言', location: '根据浏览器设置确定地区', useLocation: '使用我的位置', search: '搜索优惠', searching: '正在打开航班优惠…', invalid: '请填写出发地、目的地和出发日期。', returnError: '返回日期必须晚于出发日期。', heroTitle: '您想去哪里旅行？', heroDescription: '在一处搜索合作伙伴提供的机票、酒店和租车。' },
+  ru: { region: 'Регион', currency: 'Валюта', language: 'Язык', location: 'Регион определён по настройкам браузера', useLocation: 'Использовать моё местоположение', search: 'Найти предложения', searching: 'Открываем предложения авиабилетов…', invalid: 'Укажите пункт отправления, направление и дату вылета.', returnError: 'Дата возвращения должна быть позже даты отправления.', heroTitle: 'Куда вы хотите отправиться?', heroDescription: 'Ищите авиабилеты, отели и автомобили у партнёров в одном месте.' }
 };
 
 const pageTranslations = {
@@ -662,7 +664,7 @@ function convertStaticPrices() {
   });
 }
 
-const uiLanguages = ['en', 'fi', 'sv', 'de', 'fr', 'es', 'it', 'nl', 'pl', 'no', 'da', 'pt'].map((code) => ({ code }));
+const uiLanguages = ['en', 'fi', 'sv', 'de', 'fr', 'es', 'it', 'nl', 'pl', 'no', 'da', 'pt', 'zh', 'ru'].map((code) => ({ code }));
 const loadedLanguages = new Set(['en', 'fi']);
 
 const languageChoices = [
@@ -677,6 +679,8 @@ const languageChoices = [
   { country: 'Nederland', label: 'Nederlands', lang: 'nl', cc: 'nl', currency: 'EUR' },
   { country: 'Polska', label: 'Polski', lang: 'pl', cc: 'pl', currency: 'PLN' },
   { country: 'Portugal', label: 'Portugu\u00eas', lang: 'pt', cc: 'pt', currency: 'EUR' },
+  { country: '中国', label: '简体中文', lang: 'zh', cc: 'cn', currency: 'EUR' },
+  { country: 'Россия', label: 'Русский', lang: 'ru', cc: 'ru', currency: 'EUR' },
   { country: 'United Kingdom', label: 'English', lang: 'en', cc: 'gb', currency: 'GBP' },
   { country: 'United States', label: 'English', lang: 'en', cc: 'us', currency: 'USD' },
   { country: 'Ireland', label: 'English', lang: 'en', cc: 'ie', currency: 'EUR' },
@@ -722,7 +726,9 @@ function setCurrency(code) {
 
 function initLanguageMenu() {
   const select = document.getElementById('languageSelect');
-  if (select && ![...select.options].some((option) => option.value === 'pt')) select.add(new Option('Portugu\u00eas', 'pt'));
+  if (select) [['pt', 'Português'], ['zh', '简体中文'], ['ru', 'Русский']].forEach(([code, label]) => {
+    if (![...select.options].some((option) => option.value === code)) select.add(new Option(label, code));
+  });
   const host = document.querySelector('.nav-shell');
   if (!host || document.getElementById('langMenu')) return;
   const wrap = document.createElement('div');
@@ -1043,20 +1049,8 @@ function applyProfile(profile, locationLabel) {
   loadFlightWidget();
 }
 
-async function detectNetworkLocation() {
-  try {
-    const response = await fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(3500) });
-    if (!response.ok) throw new Error('Location lookup failed');
-    const data = await response.json();
-    const profile = regionProfiles[data.country_code] || {};
-    applyProfile({ ...profile, region: data.country_name || profile.region, currency: data.currency || profile.currency, language: currentProfile.language, airport: profile.airport || '', city: data.city || profile.city || '' });
-  } catch (error) {
-    console.info('Automatic region lookup is unavailable; using the browser region.', error);
-    applyProfile(currentProfile);
-  }
-}
-
 function initCurrencyAndLanguage() {
+  initLanguageMenu();
   const browserProfile = profileFromBrowser();
   applyProfile(browserProfile);
   document.getElementById('currencySelect')?.addEventListener('change', (event) => {
@@ -1076,8 +1070,6 @@ function initCurrencyAndLanguage() {
     applyLanguage(currentProfile.language);
     updateServiceLinks();
   });
-  window.addEventListener('load', () => setTimeout(detectNetworkLocation, 1500));
-  initLanguageMenu();
 }
 
 function initTripOptions() {
@@ -1523,7 +1515,9 @@ window.addEventListener('gvt-flight-deals-ready', initFlightDealLinks);
     it: ["Scarica l'app GoVeTrip", 'Installa su Android', 'Aggiungi a iPhone', 'Apri il menu del browser (⋮) e scegli "Installa app" o "Aggiungi a schermata Home".', 'Tocca Condividi e scegli "Aggiungi a schermata Home".', 'Già installata'],
     nl: ['Download de GoVeTrip-app', 'Installeren op Android', 'Toevoegen aan iPhone', 'Open het browsermenu (⋮) en kies "App installeren" of "Toevoegen aan startscherm".', 'Tik op Delen en kies "Zet op beginscherm".', 'Al geïnstalleerd'],
     pl: ['Pobierz aplikację GoVeTrip', 'Zainstaluj na Androidzie', 'Dodaj na iPhone', 'Otwórz menu przeglądarki (⋮) i wybierz "Zainstaluj aplikację" lub "Dodaj do ekranu głównego".', 'Dotknij Udostępnij i wybierz "Do ekranu początkowego".', 'Już zainstalowana'],
-    pt: ['Obtenha a app GoVeTrip', 'Instalar no Android', 'Adicionar ao iPhone', 'Abra o menu do navegador (⋮) e escolha "Instalar app" ou "Adicionar ao ecrã inicial".', 'Toque em Partilhar e escolha "Adicionar ao ecrã principal".', 'Já instalada']
+    pt: ['Obtenha a app GoVeTrip', 'Instalar no Android', 'Adicionar ao iPhone', 'Abra o menu do navegador (⋮) e escolha "Instalar app" ou "Adicionar ao ecrã inicial".', 'Toque em Partilhar e escolha "Adicionar ao ecrã principal".', 'Já instalada'],
+    zh: ['获取 GoVeTrip 应用', '在 Android 上安装', '添加到 iPhone', '打开浏览器菜单（⋮），选择“安装应用”或“添加到主屏幕”。', '点击分享按钮，然后选择“添加到主屏幕”。', '已安装'],
+    ru: ['Установить приложение GoVeTrip', 'Установить на Android', 'Добавить на iPhone', 'Откройте меню браузера (⋮) и выберите «Установить приложение» или «Добавить на главный экран».', 'Нажмите «Поделиться» и выберите «На экран Домой».', 'Уже установлено']
   };
   const lang = (document.documentElement.lang || 'en').slice(0, 2).toLowerCase();
   const t = T[lang] || T.en;

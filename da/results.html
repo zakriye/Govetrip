@@ -4,10 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Søgeresultater | GoVeTrip</title>
+    <meta name="description" content="Review your search details and continue to a booking partner. GoVeTrip does not process reservations or payments." />
     <meta name="robots" content="noindex, follow" />
     <link rel="canonical" href="https://www.govetrip.com/da/results.html" />
     <link rel="stylesheet" href="/styles.css?v=lang30-20261102" />
-  
+
     <meta property="og:locale" content="da_DK" />
   </head>
   <body>
@@ -42,17 +43,20 @@
         document.getElementById('resultsEyebrow').textContent = config.label;
         document.getElementById('resultsTitle').textContent = config.title;
         document.getElementById('partnerName').textContent = config.partner;
-        document.getElementById('optionTitle').textContent = 'Continue with ' + config.partner;
+        var optionTitle = document.getElementById('optionTitle');
+        optionTitle.textContent = '';
+        optionTitle.appendChild(document.createTextNode('Continue with '));
+        optionTitle.appendChild(document.createTextNode(config.partner));
         var summary = document.getElementById('resultSummary');
         if ((service === 'hotels' || service === 'stays') && params.get('destination')) {
           params.set('checkIn', params.get('checkIn') || dateAfterDays(14));
-          params.set('checkOut', params.get('checkOut') || dateAfterDays(17));
+          params.set('checkOut', params.get('checkOut') || dateAfterDays(3, params.get('checkIn')));
           params.set('guests', params.get('guests') || '2');
         }
         if ((service === 'flights' || service === 'packages') && params.get('from') && (params.get('to') || params.get('destination'))) {
           params.set('departure', params.get('departure') || dateAfterDays(30));
           if (params.get('tripType') !== 'oneway' && params.get('tripType') !== 'one-way') {
-            params.set('return', params.get('return') || dateAfterDays(37));
+            params.set('return', params.get('return') || dateAfterDays(7, params.get('departure')));
           }
           params.set('travelers', params.get('travelers') || '1');
         }
@@ -83,8 +87,8 @@
           var p = (value || '').split('-');
           return p.length === 3 ? p[2] + p[1] : '';
         }
-        function dateAfterDays(days) {
-          var date = new Date();
+        function dateAfterDays(days, start) {
+          var date = start ? new Date(start + 'T00:00:00') : new Date();
           date.setDate(date.getDate() + days);
           return date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0');
         }
@@ -116,5 +120,5 @@
       })();
     </script>
   </body>
-  <script src="/app.js?v=lang30-20261102"></script>
+  <script src="/app.js?v=locale-zh-ru-20261107"></script>
 </html>

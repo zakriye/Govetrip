@@ -214,6 +214,28 @@
     });
     var loaded = hasRoute && maps[0] && maps[1];
     $('#pcNote').textContent = state.priceError ? t(state.priceError) : loaded && !all.length ? t('No price data for this route. Try a nearby major airport.') : t('Estimated fares. Green = cheapest, yellow = average, red = most expensive.');
+    renderAlertBtn(hasRoute);
+  }
+
+  function renderAlertBtn(hasRoute) {
+    var acc = window.gvtAccount, btnEl = $('#pcAlert');
+    if (!btnEl) {
+      btnEl = document.createElement('button'); btnEl.type = 'button'; btnEl.id = 'pcAlert'; btnEl.className = 'pc-alert';
+      var msgEl = document.createElement('p'); msgEl.id = 'pcAlertMsg'; msgEl.className = 'pc-alert-msg'; msgEl.hidden = true;
+      $('#pcNote').insertAdjacentElement('afterend', msgEl); $('#pcNote').insertAdjacentElement('afterend', btnEl);
+      btnEl.addEventListener('click', function () {
+        if (!window.gvtAccount || !state.from || !state.to) return;
+        var month = (state.depart || monthKey(state.view)).slice(0, 7), out = $('#pcAlertMsg');
+        window.gvtAccount.addAlert(state.from, state.to, month, currency()).then(function (d) {
+          if (d.error === 'login') { out.textContent = window.gvtAccount.t('alSetLogin'); }
+          else { out.textContent = d.error ? window.gvtAccount.msg(d) : window.gvtAccount.t('alSetDone'); }
+          out.hidden = false;
+        });
+      });
+    }
+    btnEl.hidden = !(hasRoute && acc);
+    if (acc) btnEl.textContent = '🔔 ' + acc.t('alSet') + ' (' + state.from + ' → ' + state.to + ')';
+    $('#pcAlertMsg').hidden = true;
   }
 
   function fmt(key) {

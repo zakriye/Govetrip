@@ -290,6 +290,23 @@
     if (!w) window.location.href = url;
   }
   updateButton();
+  var searchParams = new URLSearchParams(window.location.search);
+  var requestedOrigin = searchParams.get('from');
+  var requestedDestination = searchParams.get('to');
+  if (requestedOrigin) {
+    state.from = '';
+    state.fromTouched = true;
+    fromInput.value = requestedOrigin;
+  }
+  if (requestedDestination) {
+    toInput.value = requestedDestination;
+  }
+  if (requestedOrigin || requestedDestination) {
+    Promise.all([
+      requestedOrigin ? resolvePlace(fromInput, 'from') : Promise.resolve(),
+      requestedDestination ? resolvePlace(toInput, 'to') : Promise.resolve()
+    ]).then(function () { prefetch(); render(); });
+  }
   window.addEventListener('gvt-lang', function () { updateButton(); renderPax(); if (!pop.hidden) render(); });
   window.addEventListener('gvt-currency', function () {
     hidePackageResults();

@@ -115,22 +115,12 @@
   bindPlace(toInput, 'to');
 
   function setDefaultFrom() {
-    if (state.fromTouched || state.from || geoDone) return;
+    if (state.fromTouched || state.from) return;
     var c = (typeof currentProfile !== 'undefined' && currentProfile.airport || '').match(/\(([A-Z]{3})\)/);
     if (c) { state.from = c[1]; fromInput.value = currentProfile.airport; prefetch(); }
   }
   setDefaultFrom();
-  var geoDone = false;
-  function geoFrom() {
-    fetch('https://ipapi.co/json/').then(function (r) { return r.json(); }).then(function (g) {
-      if (state.fromTouched || !g.city) return;
-      return fetch('https://autocomplete.travelpayouts.com/places2?term=' + encodeURIComponent(g.city) + '&locale=en&types[]=city').then(function (r) { return r.json(); }).then(function (items) {
-        if (state.fromTouched || !items.length) return;
-        geoDone = true; state.from = items[0].code; fromInput.value = items[0].name + ' (' + items[0].code + ')'; prefetch();
-      });
-    }).catch(function () {});
-  }
-  window.addEventListener('load', function () { setTimeout(geoFrom, 2000); setTimeout(setDefaultFrom, 1500); setTimeout(setDefaultFrom, 4000); });
+  window.addEventListener('load', function () { setTimeout(setDefaultFrom, 1500); });
 
   function monthKey(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1); }
   function addMonths(d, n) { return new Date(d.getFullYear(), d.getMonth() + n, 1); }

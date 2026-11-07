@@ -20,9 +20,14 @@ FROM_PRICE = {'fi': 'Alkaen', 'sv': 'Från', 'no': 'Fra', 'da': 'Fra', 'de': 'Ab
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TODAY = date.today().isoformat()
 
-REDIRECT = ("<script>try{var l=localStorage.getItem('govetrip.language');"
-            "if(l&&/^(" + '|'.join(LANGS) + ")$/.test(l)&&!document.documentElement.hasAttribute('data-localized'))"
-            "location.replace('/'+l+'/'+(location.pathname.split('/').pop()||'index.html')+location.search+location.hash)}catch(e){}</script>")
+REDIRECT = ("<script>try{"
+            "if(!document.documentElement.hasAttribute('data-localized')&&!/bot|crawler|spider|slurp|bingpreview/i.test(navigator.userAgent)){"
+            "var l=localStorage.getItem('govetrip.language');"
+            "if(!l){var supported=/^(en|" + '|'.join(LANGS) + ")$/;"
+            "l=(navigator.languages||[navigator.language]).map(function(x){return (x||'').toLowerCase().split('-')[0]})"
+            ".find(function(x){return supported.test(x)})||'en'}"
+            "if(/^(" + '|'.join(LANGS) + ")$/.test(l))"
+            "location.replace('/'+l+'/'+(location.pathname.split('/').pop()||'index.html')+location.search+location.hash)}}catch(e){}</script>")
 
 
 def norm(text):

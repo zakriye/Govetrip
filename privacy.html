@@ -36,7 +36,7 @@
     <link rel="alternate" hreflang="pt" href="https://www.govetrip.com/pt/privacy.html" />
     <link rel="alternate" hreflang="x-default" href="https://www.govetrip.com/privacy.html" />
     <!-- /hreflang -->
-    <!-- lang-redirect --><script>try{var l=localStorage.getItem('govetrip.language');if(l&&/^(fi|sv|no|da|de|fr|es|it|nl|pl|pt)$/.test(l)&&!document.documentElement.hasAttribute('data-localized'))location.replace('/'+l+'/'+(location.pathname.split('/').pop()||'index.html')+location.search+location.hash)}catch(e){}</script><!-- /lang-redirect -->
+    <!-- lang-redirect --><script>try{if(!document.documentElement.hasAttribute('data-localized')&&!/bot|crawler|spider|slurp|bingpreview/i.test(navigator.userAgent)){var l=localStorage.getItem('govetrip.language');if(!l){var supported=/^(en|fi|sv|no|da|de|fr|es|it|nl|pl|pt)$/;l=(navigator.languages||[navigator.language]).map(function(x){return (x||'').toLowerCase().split('-')[0]}).find(function(x){return supported.test(x)})||'en'}if(/^(fi|sv|no|da|de|fr|es|it|nl|pl|pt)$/.test(l))location.replace('/'+l+'/'+(location.pathname.split('/').pop()||'index.html')+location.search+location.hash)}}catch(e){}</script><!-- /lang-redirect -->
   </head>
   <body>
     <header class="site-header">
@@ -77,7 +77,7 @@
         </ul>
 
         <h2>Location data</h2>
-        <p>The site uses your browser language and an IP-based country and city lookup to choose regional content, a supported departure airport, language, and currency, and to suggest local GetYourGuide activities. Activity cards use category illustrations bundled with the site; no destination is sent to an external image service. It does not request GPS location or use a login profile. If you choose another activity destination, that city is saved in your browser so it remains selected as you move between pages. Language and currency selections may also be stored in your browser.</p>
+        <p>The site uses your browser's language and region settings to choose regional content, a departure airport, language, and currency. It does not perform an IP location lookup, request GPS location, or use a login profile. Activity cards use illustrations bundled with the site; if you choose an activity destination, that city is saved in your browser. Language and currency selections may also be stored in your browser.</p>
 
         <h2>Cookies and analytics</h2>
         <p>GoVeTrip stores language and currency preferences in your browser. The Travelpayouts flight widget is optional and is loaded only if you allow it in the cookie settings. This setting does not enable GoVeTrip click tracking. If you follow a booking link, the travel partner may use its own cookies and tracking under its privacy policy. GoVeTrip does not currently use analytics cookies.</p>
@@ -90,5 +90,5 @@
       </div>
     </main>
   </body>
-  <script src="app.js?v=lang30-20261102"></script>
+  <script src="app.js?v=locale-20261107"></script>
 </html>

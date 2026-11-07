@@ -33,7 +33,7 @@
     <link rel="alternate" hreflang="pt" href="https://www.govetrip.com/pt/explore.html" />
     <link rel="alternate" hreflang="x-default" href="https://www.govetrip.com/explore.html" />
     <!-- /hreflang -->
-    <!-- lang-redirect --><script>try{var l=localStorage.getItem('govetrip.language');if(l&&/^(fi|sv|no|da|de|fr|es|it|nl|pl|pt)$/.test(l)&&!document.documentElement.hasAttribute('data-localized'))location.replace('/'+l+'/'+(location.pathname.split('/').pop()||'index.html')+location.search+location.hash)}catch(e){}</script><!-- /lang-redirect -->
+    <!-- lang-redirect --><script>try{if(!document.documentElement.hasAttribute('data-localized')&&!/bot|crawler|spider|slurp|bingpreview/i.test(navigator.userAgent)){var l=localStorage.getItem('govetrip.language');if(!l){var supported=/^(en|fi|sv|no|da|de|fr|es|it|nl|pl|pt)$/;l=(navigator.languages||[navigator.language]).map(function(x){return (x||'').toLowerCase().split('-')[0]}).find(function(x){return supported.test(x)})||'en'}if(/^(fi|sv|no|da|de|fr|es|it|nl|pl|pt)$/.test(l))location.replace('/'+l+'/'+(location.pathname.split('/').pop()||'index.html')+location.search+location.hash)}}catch(e){}</script><!-- /lang-redirect -->
   </head>
   <body>
     <header class="site-header"><div class="container nav-shell">
@@ -62,8 +62,8 @@
         @media(max-width:760px){.ex-filters{display:grid;grid-template-columns:1fr 1fr;align-items:end}.ex-filters label:first-child{grid-column:1/-1}.ex-filters input[type=text],.ex-filters select{min-width:0;width:100%;box-sizing:border-box}.ex-range input{width:100%;min-width:0}.ex-range{flex-wrap:wrap}.ex-grid{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}}
         @media(max-width:480px){.ex-filters{grid-template-columns:1fr}.ex-filters label:first-child{grid-column:auto}}
       </style>
-      <script src="explore.js?v=lang30-20261102"></script>
+      <script src="explore.js?v=locale-20261107"></script>
     </div></main>
   </body>
-  <script src="app.js?v=lang30-20261102"></script>
+  <script src="app.js?v=locale-20261107"></script>
 </html>

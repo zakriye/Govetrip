@@ -1043,20 +1043,8 @@ function applyProfile(profile, locationLabel) {
   loadFlightWidget();
 }
 
-async function detectNetworkLocation() {
-  try {
-    const response = await fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(3500) });
-    if (!response.ok) throw new Error('Location lookup failed');
-    const data = await response.json();
-    const profile = regionProfiles[data.country_code] || {};
-    applyProfile({ ...profile, region: data.country_name || profile.region, currency: data.currency || profile.currency, language: currentProfile.language, airport: profile.airport || '', city: data.city || profile.city || '' });
-  } catch (error) {
-    console.info('Automatic region lookup is unavailable; using the browser region.', error);
-    applyProfile(currentProfile);
-  }
-}
-
 function initCurrencyAndLanguage() {
+  initLanguageMenu();
   const browserProfile = profileFromBrowser();
   applyProfile(browserProfile);
   document.getElementById('currencySelect')?.addEventListener('change', (event) => {
@@ -1076,8 +1064,6 @@ function initCurrencyAndLanguage() {
     applyLanguage(currentProfile.language);
     updateServiceLinks();
   });
-  window.addEventListener('load', () => setTimeout(detectNetworkLocation, 1500));
-  initLanguageMenu();
 }
 
 function initTripOptions() {

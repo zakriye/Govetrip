@@ -1242,6 +1242,7 @@ function initSearch() {
       const dm = (iso) => { const p = iso.split('-'); return p[2] + p[1]; };
       const back = returnDate && tripType === 'round' ? dm(returnDate) : '';
       const target = 'https://www.aviasales.com/search/' + o + dm(departure) + d + back + (parseInt(travelers, 10) || 1) + '?currency=' + currentProfile.currency.toLowerCase();
+      try { window.gvtAccount && window.gvtAccount.recordSearch(o + ' → ' + d + ' · ' + departure, target); } catch (e) {}
       window.location.href = 'https://aviasales.tpm.lv/kG8FZBWw?u=' + encodeURIComponent(target);
     });  });
 }

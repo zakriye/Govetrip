@@ -3661,6 +3661,8 @@ html.gvt-splashing, html.gvt-splashing body { overflow: hidden; }
 .acc-form label{display:flex;flex-direction:column;gap:4px;font:600 13px Inter,sans-serif;color:#3b3652}
 .acc-form input:not([type=checkbox]){min-height:44px;border:1px solid #cfc9e0;border-radius:10px;padding:0 12px;font:400 15px Inter,sans-serif}
 .acc-check{flex-direction:row!important;gap:8px!important;align-items:flex-start;font-weight:400!important}
+.acc-check input[type=checkbox]{width:auto!important;min-width:0;flex:none;margin:3px 0 0;padding:0}
+.acc-check span{flex:1}
 .acc-msg{color:#b42318;font-size:13px;min-height:0}
 .acc-small{font-size:12px;color:#6b6880;margin:10px 0 0}
 .acc-link{border:0;background:none;color:#6d28d9;cursor:pointer;font:600 13px Inter,sans-serif;padding:0;text-decoration:underline}

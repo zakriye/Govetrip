@@ -76,7 +76,7 @@ def slug(name):
 
 
 def head(title, desc, path, extra_ld, robots='index,follow'):
-    url = SITE + path
+    url = SITE + (path[:-len('index.html')] if path.endswith('/index.html') else path)
     ld = ''.join('<script type="application/ld+json">%s</script>' % json.dumps(b, ensure_ascii=False, separators=(',', ':')) for b in extra_ld)
     return (
         '<!DOCTYPE html>\n<html lang="en">\n<head>\n'
@@ -186,6 +186,10 @@ def route_page(o, d):
     code, name, country, best, highlights = d
     path = '/flights/%s-to-%s.html' % (slug(ocity), slug(name))
     title = 'Cheap Flights from %s to %s (%s–%s) | GoVeTrip' % (ocity, name, ocode, code)
+    if len(title) > 60:
+        title = 'Cheap Flights %s to %s (%s–%s) | GoVeTrip' % (ocity, name, ocode, code)
+    if len(title) > 60:
+        title = 'Flights %s to %s (%s–%s) | GoVeTrip' % (ocity, name, ocode, code)
     desc = 'Compare flights from %s to %s. Find the cheapest dates with a flexible price calendar and book with trusted partners.' % (ocity, name)
     faqs = [
         ('How can I find cheap flights from %s to %s?' % (ocity, name), 'Compare several dates with the GoVeTrip price calendar, travel midweek if you can, and book a few weeks ahead. Fares change often.'),
@@ -225,12 +229,12 @@ def hub(path, title, desc, h1, intro, links, crumb):
     body = (
         '<body>\n' + NAV + '<main class="legal-shell"><div class="container legal-card">'
         '<nav aria-label="Breadcrumb"><a href="/index.html">Home</a> › %s</nav><h1>%s</h1><p>%s</p><ul>%s</ul></div></main>\n' % (crumb, escape(h1), escape(intro), items))
-    ld = [breadcrumbs([('Home', '/'), (crumb, path)])]
+    ld = [breadcrumbs([('Home', '/'), (crumb, path[:-len('index.html')])])]
     write(path, head(title, desc, path, ld) + body + FOOT)
 
 
 def sitemap(name, urls):
-    rows = ''.join('  <url><loc>%s%s</loc><lastmod>%s</lastmod></url>\n' % (SITE, u, TODAY) for u in urls)
+    rows = ''.join('  <url><loc>%s%s</loc></url>\n' % (SITE, u) for u in urls)
     write('/' + name, '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + rows + '</urlset>\n')
 
 

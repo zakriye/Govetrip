@@ -2,6 +2,9 @@
   RewriteEngine On
   RewriteCond %{HTTP_HOST} ^govetrip\.com$ [NC]
   RewriteRule ^(.*)$ https://www.govetrip.com/$1 [R=301,L]
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+  RewriteRule ^(.*)$ https://www.govetrip.com/$1 [R=301,L]
 </IfModule>
 
 <FilesMatch "^api-config(\.local|\.example)?\.php$">

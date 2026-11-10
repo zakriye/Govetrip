@@ -277,8 +277,73 @@
       alert_limit: 'Já tem 10 alertas. Remova um primeiro.',
       alSet: 'Criar alerta de preço', alSetDone: 'Alerta criado! Enviamos-lhe um e-mail quando o preço descer.', alSetLogin: 'Inicie sessão para criar um alerta de preço.',
       tabSearch: 'Pesquisar', tabExplore: 'Explorar', tabTrips: 'Viagens', tabProfile: 'Perfil'
+    },
+    zh: {
+      signin: '登录', profile: '个人资料', save: '加入心愿单', saved: '已加入心愿单',
+      title: '畅享 GoVeTrip', b1: '将旅行和目的地加入心愿单', b2: '在一处查看最近的搜索',
+      b3: '接收旅行优惠和建议（可选）', google: '使用 Google 继续', or: '或', email: '使用电子邮箱继续',
+      login: '登录', register: '创建账户', name: '姓名', emailL: '电子邮箱', pass: '密码（至少 8 个字符）',
+      marketing: '通过电子邮件向我发送旅行优惠和灵感。您可以随时取消订阅。',
+      terms: '继续即表示您同意我们的<a href="terms.html">服务条款</a>和<a href="privacy.html">隐私政策</a>。',
+      forgot: '忘记密码？', haveAcc: '已有账户？登录', noAcc: '新用户？创建账户',
+      wishlist: '心愿单', searches: '最近的搜索', account: '账户', logout: '退出登录',
+      hello: '您好', empty: '这里暂时没有内容。', clear: '清除历史记录', remove: '移除', settings: '设置',
+      homeAirport: '常用机场（例如 HEL）', saveBtn: '保存', del: '删除账户', delConfirm: '永久删除您的账户和所有已保存的数据？',
+      sent: '如果该邮箱已注册，重置链接已发送。', newPass: '新密码（至少 8 个字符）', setPass: '设置新密码',
+      done: '已保存', err: '出现问题，请重试。', invalid_credentials: '邮箱或密码不正确。',
+      email_taken: '该邮箱已注册。', weak_password: '密码必须至少包含 8 个字符。',
+      invalid_email: '请输入有效的邮箱地址。', rate_limited: '尝试次数过多，请稍后再试。', close: '关闭',
+      needLogin: '请登录以查看您的账户。',
+      alerts: '价格提醒', alertsInfo: '当月最低机票价格下降时，我们会通过电子邮件通知您。目标价格留空时，降幅达到或超过 5% 即会收到通知。',
+      alFrom: '出发地（例如 HEL）', alTo: '目的地（例如 BKK）', alMonth: '月份', alTarget: '目标价格（可选）', alAdd: '创建提醒',
+      alNow: '当前价格', alMax: '最多可设置 10 个提醒。', invalid_alert: '请检查机场代码（3 个字母）并选择未来月份。',
+      alert_limit: '您已有 10 个提醒，请先移除一个。',
+      alSet: '设置价格提醒', alSetDone: '提醒已设置！价格下降时我们会发送电子邮件。', alSetLogin: '请登录以设置价格提醒。',
+      tabSearch: '搜索', tabExplore: '探索', tabTrips: '旅行', tabProfile: '个人资料'
+    },
+    ru: {
+      signin: 'Войти', profile: 'Профиль', save: 'Сохранить в избранное', saved: 'Сохранено в избранном',
+      title: 'Больше возможностей с GoVeTrip', b1: 'Сохраняйте поездки и направления в избранном', b2: 'Просматривайте недавние поиски в одном месте',
+      b3: 'Получайте предложения и советы для путешествий (необязательно)', google: 'Продолжить с Google', or: 'или', email: 'Продолжить с электронной почтой',
+      login: 'Войти', register: 'Создать аккаунт', name: 'Имя', emailL: 'Электронная почта', pass: 'Пароль (не менее 8 символов)',
+      marketing: 'Присылайте мне предложения и идеи для путешествий по электронной почте. Отписаться можно в любое время.',
+      terms: 'Продолжая, вы принимаете <a href="terms.html">условия использования</a> и <a href="privacy.html">политику конфиденциальности</a>.',
+      forgot: 'Забыли пароль?', haveAcc: 'Уже есть аккаунт? Войти', noAcc: 'Впервые здесь? Создать аккаунт',
+      wishlist: 'Избранное', searches: 'Недавние поиски', account: 'Аккаунт', logout: 'Выйти',
+      hello: 'Здравствуйте', empty: 'Здесь пока ничего нет.', clear: 'Очистить историю', remove: 'Удалить', settings: 'Настройки',
+      homeAirport: 'Основной аэропорт (например, HEL)', saveBtn: 'Сохранить', del: 'Удалить аккаунт', delConfirm: 'Удалить аккаунт и все сохранённые данные без возможности восстановления?',
+      sent: 'Если адрес зарегистрирован, ссылка для сброса пароля отправлена.', newPass: 'Новый пароль (не менее 8 символов)', setPass: 'Установить новый пароль',
+      done: 'Сохранено', err: 'Что-то пошло не так. Попробуйте ещё раз.', invalid_credentials: 'Неверная почта или пароль.',
+      email_taken: 'Этот адрес уже зарегистрирован.', weak_password: 'Пароль должен содержать не менее 8 символов.',
+      invalid_email: 'Введите действительный адрес электронной почты.', rate_limited: 'Слишком много попыток. Попробуйте позже.', close: 'Закрыть',
+      needLogin: 'Войдите, чтобы просмотреть свой аккаунт.',
+      alerts: 'Уведомления о цене', alertsInfo: 'Мы отправим письмо, когда цена самого дешёвого рейса за месяц снизится. Оставьте целевую цену пустой, чтобы получать уведомления о снижении на 5% и более.',
+      alFrom: 'Откуда (например, HEL)', alTo: 'Куда (например, BKK)', alMonth: 'Месяц', alTarget: 'Целевая цена (необязательно)', alAdd: 'Создать уведомление',
+      alNow: 'Сейчас', alMax: 'Можно создать не более 10 уведомлений.', invalid_alert: 'Проверьте коды аэропортов (3 буквы) и выберите будущий месяц.',
+      alert_limit: 'У вас уже 10 уведомлений. Сначала удалите одно из них.',
+      alSet: 'Следить за ценой', alSetDone: 'Уведомление создано! Мы сообщим по почте о снижении цены.', alSetLogin: 'Войдите, чтобы следить за ценой.',
+      tabSearch: 'Поиск', tabExplore: 'Обзор', tabTrips: 'Поездки', tabProfile: 'Профиль'
     }
   };
+  var accountErrors = {
+    en: ['Enter a valid three-letter airport code.', 'This reset link is invalid or has expired.', 'Google sign-in failed. Please try again.'],
+    fi: ['Anna kelvollinen kolmikirjaiminen lentokenttäkoodi.', 'Palautuslinkki on virheellinen tai vanhentunut.', 'Google-kirjautuminen epäonnistui. Yritä uudelleen.'],
+    sv: ['Ange en giltig flygplatskod med tre bokstäver.', 'Återställningslänken är ogiltig eller har gått ut.', 'Inloggning med Google misslyckades. Försök igen.'],
+    no: ['Oppgi en gyldig flyplasskode med tre bokstaver.', 'Tilbakestillingslenken er ugyldig eller utløpt.', 'Innlogging med Google mislyktes. Prøv igjen.'],
+    da: ['Indtast en gyldig lufthavnskode på tre bogstaver.', 'Nulstillingslinket er ugyldigt eller udløbet.', 'Login med Google mislykkedes. Prøv igen.'],
+    de: ['Gib einen gültigen Flughafencode mit drei Buchstaben ein.', 'Der Link zum Zurücksetzen ist ungültig oder abgelaufen.', 'Die Anmeldung mit Google ist fehlgeschlagen. Bitte versuche es erneut.'],
+    fr: ['Saisissez un code aéroport valide à trois lettres.', 'Ce lien de réinitialisation est invalide ou expiré.', 'La connexion avec Google a échoué. Veuillez réessayer.'],
+    es: ['Introduce un código de aeropuerto válido de tres letras.', 'El enlace de restablecimiento no es válido o ha caducado.', 'No se pudo iniciar sesión con Google. Inténtalo de nuevo.'],
+    it: ['Inserisci un codice aeroportuale valido di tre lettere.', 'Il link di reimpostazione non è valido o è scaduto.', 'Accesso con Google non riuscito. Riprova.'],
+    nl: ['Voer een geldige luchthavencode van drie letters in.', 'Deze herstelkoppeling is ongeldig of verlopen.', 'Inloggen met Google is mislukt. Probeer het opnieuw.'],
+    pl: ['Podaj prawidłowy trzyliterowy kod lotniska.', 'Link do resetowania jest nieprawidłowy lub wygasł.', 'Logowanie przez Google nie powiodło się. Spróbuj ponownie.'],
+    pt: ['Introduza um código de aeroporto válido com três letras.', 'A ligação de reposição é inválida ou expirou.', 'O início de sessão com o Google falhou. Tente novamente.'],
+    zh: ['请输入有效的三字母机场代码。', '此重置链接无效或已过期。', '使用 Google 登录失败，请重试。'],
+    ru: ['Введите действительный трёхбуквенный код аэропорта.', 'Ссылка для сброса пароля недействительна или истекла.', 'Не удалось войти через Google. Попробуйте ещё раз.']
+  };
+  Object.keys(T).forEach(function (code) {
+    ['invalid_airport', 'invalid_token', 'google_failed'].forEach(function (key, i) { T[code][key] = accountErrors[code][i]; });
+  });
   var lang = (document.documentElement.lang || 'en').slice(0, 2);
   var L = T[lang] || T.en;
   function t(k) { return L[k] || T.en[k] || k; }
@@ -303,7 +368,7 @@
   }
   function msg(d) { return d && d.error ? (L[d.error] || t('err')) : ''; }
 
-  function pagePath() { return location.pathname.replace(/^\/(fi|sv|no|da|de|fr|es|it|nl|pl|pt)\//, '/'); }
+  function pagePath() { return location.pathname.replace(/^\/(fi|sv|no|da|de|fr|es|it|nl|pl|pt|zh|ru)\//, '/'); }
   function isSaved() { var p = pagePath(); return state.wishlist.some(function (w) { return w.url === p || w.url === location.pathname; }); }
 
   var wishBtn, profBtn, menu;
@@ -390,7 +455,7 @@
       body.querySelector('[data-toggle]').addEventListener('click', function () { m = reg ? 'login' : 'register'; form(); });
       body.querySelector('[data-forgot]').addEventListener('click', function () {
         var em = f.email.value.trim(); if (!em) { out.textContent = t('invalid_email'); return; }
-        api({ action: 'forgot', email: em }).then(function () { out.textContent = t('sent'); });
+        api({ action: 'forgot', email: em }).then(function (d) { out.textContent = d.error ? msg(d) : t('sent'); });
       });
       f.addEventListener('submit', function (e) {
         e.preventDefault(); out.textContent = '';
@@ -411,9 +476,15 @@
     loadGoogle(function () {
       google.accounts.id.initialize({
         client_id: state.googleClientId,
-        callback: function (resp) { api({ action: 'google', credential: resp.credential, lang: lang }).then(function (d) { if (!d.error) { apply(d); done(); } }); }
+        callback: function (resp) { api({ action: 'google', credential: resp.credential, lang: lang }).then(function (d) {
+          if (d.error) {
+            var out = el.parentNode.querySelector('.acc-msg');
+            if (!out) { out = document.createElement('p'); out.className = 'acc-msg'; out.setAttribute('role', 'alert'); el.parentNode.insertBefore(out, el.nextSibling); }
+            out.textContent = msg(d);
+          } else { apply(d); done(); }
+        }); }
       });
-      google.accounts.id.renderButton(el, { theme: 'outline', size: 'large', width: 300, text: 'continue_with' });
+      google.accounts.id.renderButton(el, { theme: 'outline', size: 'large', width: 300, text: 'continue_with', locale: lang === 'zh' ? 'zh-CN' : lang });
     });
   }
 
@@ -430,7 +501,7 @@
   // Mobile app-style bottom tabs
   function bottomTabs() {
     if (document.querySelector('.gvt-tabbar')) return;
-    var m = location.pathname.match(/^\/(fi|sv|no|da|de|fr|es|it|nl|pl|pt)\//), base = m ? '/' + m[1] + '/' : '/';
+    var m = location.pathname.match(/^\/(fi|sv|no|da|de|fr|es|it|nl|pl|pt|zh|ru)\//), base = m ? '/' + m[1] + '/' : '/';
     var path = location.pathname.replace(base, '/'), page = path.split('/').pop() || 'index.html';
     var items = [
       ['search', 'tabSearch', base + '#search', '<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>', page === 'index.html' || page === ''],
@@ -502,7 +573,7 @@
         });
       });
       var dl = root.querySelector('[data-del]'); if (dl) dl.addEventListener('click', function () { if (confirm(t('delConfirm'))) api({ action: 'delete_account', confirm: true }).then(function () { location.href = 'index.html'; }); });
-      var f = root.querySelector('form'); if (f) f.addEventListener('submit', function (e) {
+      var f = tab === 'settings' ? root.querySelector('form') : null; if (f) f.addEventListener('submit', function (e) {
         e.preventDefault();
         api({ action: 'profile', name: f.name.value.trim(), homeAirport: f.ha.value.trim(), marketing: f.mk.checked, lang: lang }).then(function (d) {
           if (d.error) { f.querySelector('.acc-msg').textContent = msg(d); return; }

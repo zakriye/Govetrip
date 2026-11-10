@@ -305,6 +305,8 @@ function alertMail(array $user, array $al, array $best): void
         'nl' => ['Prijsalert: {route} nu {price}', "Hallo,\n\nde prijs voor {route} is gedaald: de goedkoopste vlucht in {month} kost nu {price} ({date}).\n\nBekijk het aanbod: {link}\n\nPrijzen veranderen snel. Beheer je alerts: {manage}\n\nGoVeTrip"],
         'pl' => ['Alert cenowy: {route} teraz {price}', "Cześć,\n\ncena trasy {route} spadła: najtańszy lot w {month} kosztuje teraz {price} ({date}).\n\nZobacz ofertę: {link}\n\nCeny szybko się zmieniają. Zarządzaj alertami: {manage}\n\nGoVeTrip"],
         'pt' => ['Alerta de preço: {route} agora {price}', "Olá,\n\no preço de {route} desceu: o voo mais barato em {month} custa agora {price} ({date}).\n\nVer a oferta: {link}\n\nOs preços mudam depressa. Gerir os seus alertas: {manage}\n\nGoVeTrip"],
+        'zh' => ['价格提醒：{route} 现价 {price}', "您好，\n\n{route} 的价格下降了：{month} 最便宜的航班现价为 {price}（{date}）。\n\n查看优惠：{link}\n\n价格变化较快。管理您的提醒：{manage}\n\nGoVeTrip"],
+        'ru' => ['Уведомление о цене: {route} теперь {price}', "Здравствуйте!\n\nЦена на рейс {route} снизилась: самый дешёвый рейс за {month} теперь стоит {price} ({date}).\n\nПосмотреть предложение: {link}\n\nЦены быстро меняются. Управление уведомлениями: {manage}\n\nGoVeTrip"],
     ];
     $code = substr((string)($user['lang'] ?? ''), 0, 2);
     if (!isset($tpl[$code])) {

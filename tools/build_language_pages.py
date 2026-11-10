@@ -3,7 +3,9 @@
 Static text is translated at build time from i18n/<lang>.json, so every language page is
 delivered fully translated (no client-side flash) and can be indexed with hreflang.
 Run after editing a root page:  python tools/build_language_pages.py
+To rebuild one page only:  python tools/build_language_pages.py --page account.html
 """
+import argparse
 import glob
 import html
 import json
@@ -136,10 +138,14 @@ def update_root(path, page, source):
         fh.write(new)
 
 
-def build():
+def build(only_page=None):
     dictionaries = {lang: load(lang) for lang in LANGS}
     pages = sorted(os.path.basename(p) for p in glob.glob(os.path.join(ROOT, '*.html')))
     pages = [p for p in pages if p not in SKIP]
+    if only_page:
+        if only_page not in pages:
+            raise ValueError('Unknown root page: ' + only_page)
+        pages = [only_page]
     report = {}
     sitemap_rows = []
     for page in pages:
@@ -147,7 +153,7 @@ def build():
         with open(path, encoding='utf-8') as fh:
             source = clean_source(fh.read())
         indexable = 'noindex' not in source
-        if indexable:
+        if indexable and not only_page:
             update_root(path, page, source)
         for lang in LANGS:
             stats = {'hit': 0, 'miss': set()}
@@ -171,6 +177,9 @@ def build():
             links += '<xhtml:link rel="alternate" hreflang="x-default" href="%s"/>' % page_url('en', page)
             for lang in LANGS:
                 sitemap_rows.append('  <url><loc>%s</loc>%s<lastmod>%s</lastmod></url>' % (page_url(lang, page), links, TODAY))
+    if only_page:
+        print('pages:', len(pages), 'languages:', len(LANGS))
+        return
     xml = ('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" '
            'xmlns:xhtml="http://www.w3.org/1999/xhtml">\n' + '\n'.join(sitemap_rows) + '\n</urlset>\n')
     with open(os.path.join(ROOT, 'sitemap-languages.xml'), 'w', encoding='utf-8', newline='') as fh:
@@ -186,4 +195,6 @@ def build():
 
 
 if __name__ == '__main__':
-    build()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--page', help='Build only this root HTML page, without updating root pages or sitemaps')
+    build(parser.parse_args().page)

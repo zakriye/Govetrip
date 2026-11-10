@@ -175,7 +175,6 @@ def destination_page(d):
         breadcrumbs([('Home', '/'), ('Destinations', '/destinations/'), (name, path)]),
         {'@context': 'https://schema.org', '@type': 'TouristDestination', 'name': name, 'description': desc, 'url': SITE + path,
          'containedInPlace': {'@type': 'Country', 'name': country}},
-        faq_ld(faqs),
     ]
     write(path, head(title, desc, path, ld) + body + FOOT)
     return path
@@ -207,7 +206,8 @@ def route_page(o, d):
         '<span class="eyebrow">%(oa)s → %(code)s</span><h1>Cheap flights from %(oc)s to %(n)s</h1>'
         '<p>Looking for flights from %(oc)s (%(ocode)s) to %(n)s (%(code)s)? Use GoVeTrip to compare dates and prices, then continue to a trusted partner to book.</p>'
         '<p><a class="btn btn-primary" href="/index.html?from=%(oq)s&to=%(q)s#search">Search %(ocode)s → %(code)s flights</a></p>'
-        '<h2>About the route</h2><p>%(n)s, %(c)s is known for %(h)s. The best time to go is %(best)s.</p>'
+        '<h2>How GoVeTrip helps on this route</h2><p>This page lists no fares or flight schedules. Use the search to see current partner offers for your dates; availability and prices are set by the booking partner. See the <a href="/affiliate-disclosure.html">affiliate disclosure</a> for how GoVeTrip earns commission.</p>'
+         '<h2>About the route</h2><p>%(n)s, %(c)s is known for %(h)s. The best time to go is %(best)s.</p>'
         '<h2>Plan the rest of your trip</h2><p><a href="/destinations/%(ns)s.html">%(n)s travel guide</a> · '
         '<a href="%(b)s" target="_blank" rel="sponsored noopener">Hotels in %(n)s</a> · <a href="/cars.html">Car rental</a></p>'
         '%(faq)s<h2>Related routes</h2><ul>%(more)s</ul></div></main>\n'
@@ -218,7 +218,6 @@ def route_page(o, d):
     }
     ld = [
         breadcrumbs([('Home', '/'), ('Flights', '/flights/'), ('%s to %s' % (ocity, name), path)]),
-        faq_ld(faqs),
     ]
     write(path, head(title, desc, path, ld) + body + FOOT)
     return path

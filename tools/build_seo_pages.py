@@ -7,6 +7,7 @@ import os
 import shutil
 from datetime import date
 from html import escape
+from urllib.parse import quote
 
 SITE = 'https://www.govetrip.com'
 TODAY = date.today().isoformat()
@@ -86,9 +87,9 @@ def head(title, desc, path, extra_ld, robots='index,follow'):
         '<link rel="alternate" hreflang="en" href="%(u)s" /><link rel="alternate" hreflang="x-default" href="%(u)s" />\n'
         '<meta property="og:type" content="website" /><meta property="og:site_name" content="GoVeTrip" />\n'
         '<meta property="og:title" content="%(t)s" /><meta property="og:description" content="%(d)s" />\n'
-        '<meta property="og:url" content="%(u)s" /><meta property="og:image" content="%(s)s/assets/bangkok-skyline.jpg" />\n'
+        '<meta property="og:url" content="%(u)s" /><meta property="og:image" content="%(s)s/assets/govetrip-logo-640.png" />\n'
         '<meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content="%(t)s" />\n'
-        '<meta name="twitter:description" content="%(d)s" />\n'
+        '<meta name="twitter:description" content="%(d)s" /><meta name="twitter:image" content="%(s)s/assets/govetrip-logo-640.png" />\n'
         '<link rel="stylesheet" href="/styles.css?v=lang34-20261102" />\n%(ld)s\n</head>\n'
     ) % {'t': escape(title), 'd': escape(desc), 'r': robots, 'u': url, 's': SITE, 'ld': ld}
 
@@ -103,8 +104,8 @@ NAV = (
 )
 FOOT = (
     '<footer class="container" style="padding:32px 0;text-align:center"><p>'
-    '<a href="/about.html">About</a> Â· <a href="/privacy.html">Privacy</a> Â· <a href="/terms.html">Terms</a> Â· '
-    '<a href="/affiliate-disclosure.html">Affiliate disclosure</a> Â· <a href="/contact.html">Contact</a></p>'
+    '<a href="/about.html">About</a> · <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a> · '
+    '<a href="/affiliate-disclosure.html">Affiliate disclosure</a> · <a href="/contact.html">Contact</a></p>'
     '<p>GoVeTrip compares offers from third-party partners and may earn a commission on bookings. Prices shown on partner sites change often.</p></footer>\n</body>\n</html>\n'
 )
 
@@ -155,18 +156,18 @@ def destination_page(d):
     body = (
         '<body>\n' + NAV +
         '<main class="legal-shell"><div class="container legal-card">'
-        '<nav aria-label="Breadcrumb"><a href="/index.html">Home</a> â€º <a href="/destinations/">Destinations</a> â€º %(n)s</nav>'
+        '<nav aria-label="Breadcrumb"><a href="/index.html">Home</a> › <a href="/destinations/">Destinations</a> › %(n)s</nav>'
         '<span class="eyebrow">%(c)s</span><h1>Travel to %(n)s: flights, hotels and car rental</h1>'
         '<p>%(n)s is one of the most popular city destinations in %(c)s, known for %(h)s. GoVeTrip helps you compare flights, hotels and car rentals from trusted partners in one place.</p>'
-        '<p><a class="btn btn-primary" href="/index.html#search">Search flights to %(n)s</a> '
+        '<p><a class="btn btn-primary" href="/index.html?to=%(q)s#search">Search flights to %(n)s</a> '
         '<a class="btn" href="%(b)s" target="_blank" rel="sponsored noopener">Find hotels in %(n)s</a></p>'
         '<h2>Best time to visit %(n)s</h2><p>%(best)s is generally the best period for a trip to %(n)s, with the most pleasant conditions for sightseeing.</p>'
-        '<h2>Cheap flights to %(n)s</h2><p>Flight prices to %(n)s (%(code)s) vary by season and weekday. Compare departure airports and travel dates with the <a href="/index.html#search">price calendar</a> to find the lowest fares.</p>'
+        '<h2>Cheap flights to %(n)s</h2><p>Flight prices to %(n)s (%(code)s) vary by season and weekday. Compare departure airports and travel dates with the <a href="/index.html?to=%(q)s#search">price calendar</a> to find the lowest fares.</p>'
         '<ul>%(r)s</ul>'
         '<h2>Hotels and car rental in %(n)s</h2><p>Compare <a href="%(b)s" target="_blank" rel="sponsored noopener">hotels in %(n)s</a> by price and location, or browse <a href="/cars.html">car rental options</a> for day trips beyond the city.</p>'
         '%(faq)s%(o)s</div></main>\n'
     ) % {
-        'n': escape(name), 'c': escape(country), 'h': escape(highlights), 'b': booking(name), 'best': escape(best[0].upper() + best[1:]),
+        'n': escape(name), 'q': quote(name, safe=''), 'c': escape(country), 'h': escape(highlights), 'b': booking(name), 'best': escape(best[0].upper() + best[1:]),
         'code': code, 'r': routes, 'faq': faq_html(faqs),
         'o': ('<h2>More destinations in %s</h2><ul>%s</ul>' % (escape(country), others)) if others else '',
     }
@@ -184,7 +185,7 @@ def route_page(o, d):
     ocode, ocity, oairport = o
     code, name, country, best, highlights = d
     path = '/flights/%s-to-%s.html' % (slug(ocity), slug(name))
-    title = 'Cheap Flights from %s to %s (%sâ€“%s) | GoVeTrip' % (ocity, name, ocode, code)
+    title = 'Cheap Flights from %s to %s (%s–%s) | GoVeTrip' % (ocity, name, ocode, code)
     desc = 'Compare flights from %s to %s. Find the cheapest dates with a flexible price calendar and book with trusted partners.' % (ocity, name)
     faqs = [
         ('How can I find cheap flights from %s to %s?' % (ocity, name), 'Compare several dates with the GoVeTrip price calendar, travel midweek if you can, and book a few weeks ahead. Fares change often.'),
@@ -198,16 +199,17 @@ def route_page(o, d):
     body = (
         '<body>\n' + NAV +
         '<main class="legal-shell"><div class="container legal-card">'
-        '<nav aria-label="Breadcrumb"><a href="/index.html">Home</a> â€º <a href="/flights/">Flights</a> â€º %(oc)s to %(n)s</nav>'
-        '<span class="eyebrow">%(oa)s â†’ %(code)s</span><h1>Cheap flights from %(oc)s to %(n)s</h1>'
+        '<nav aria-label="Breadcrumb"><a href="/index.html">Home</a> › <a href="/flights/">Flights</a> › %(oc)s to %(n)s</nav>'
+        '<span class="eyebrow">%(oa)s → %(code)s</span><h1>Cheap flights from %(oc)s to %(n)s</h1>'
         '<p>Looking for flights from %(oc)s (%(ocode)s) to %(n)s (%(code)s)? Use GoVeTrip to compare dates and prices, then continue to a trusted partner to book.</p>'
-        '<p><a class="btn btn-primary" href="/index.html#search">Search %(ocode)s â†’ %(code)s flights</a></p>'
+        '<p><a class="btn btn-primary" href="/index.html?from=%(oq)s&to=%(q)s#search">Search %(ocode)s → %(code)s flights</a></p>'
         '<h2>About the route</h2><p>%(n)s, %(c)s is known for %(h)s. The best time to go is %(best)s.</p>'
-        '<h2>Plan the rest of your trip</h2><p><a href="/destinations/%(ns)s.html">%(n)s travel guide</a> Â· '
-        '<a href="%(b)s" target="_blank" rel="sponsored noopener">Hotels in %(n)s</a> Â· <a href="/cars.html">Car rental</a></p>'
+        '<h2>Plan the rest of your trip</h2><p><a href="/destinations/%(ns)s.html">%(n)s travel guide</a> · '
+        '<a href="%(b)s" target="_blank" rel="sponsored noopener">Hotels in %(n)s</a> · <a href="/cars.html">Car rental</a></p>'
         '%(faq)s<h2>Related routes</h2><ul>%(more)s</ul></div></main>\n'
     ) % {
-        'oc': escape(ocity), 'oa': escape(oairport), 'ocode': ocode, 'n': escape(name), 'code': code, 'c': escape(country),
+        'oc': escape(ocity), 'oa': escape(oairport), 'ocode': ocode, 'oq': quote(ocity, safe=''), 'q': quote(name, safe=''),
+        'n': escape(name), 'code': code, 'c': escape(country),
         'h': escape(highlights), 'best': escape(best), 'b': booking(name), 'ns': slug(name), 'faq': faq_html(faqs), 'more': more,
     }
     ld = [
@@ -222,7 +224,7 @@ def hub(path, title, desc, h1, intro, links, crumb):
     items = ''.join('<li><a href="%s">%s</a></li>' % (p, escape(t)) for p, t in links)
     body = (
         '<body>\n' + NAV + '<main class="legal-shell"><div class="container legal-card">'
-        '<nav aria-label="Breadcrumb"><a href="/index.html">Home</a> â€º %s</nav><h1>%s</h1><p>%s</p><ul>%s</ul></div></main>\n' % (crumb, escape(h1), escape(intro), items))
+        '<nav aria-label="Breadcrumb"><a href="/index.html">Home</a> › %s</nav><h1>%s</h1><p>%s</p><ul>%s</ul></div></main>\n' % (crumb, escape(h1), escape(intro), items))
     ld = [breadcrumbs([('Home', '/'), (crumb, path)])]
     write(path, head(title, desc, path, ld) + body + FOOT)
 

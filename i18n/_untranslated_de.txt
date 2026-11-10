@@ -1,12 +1,15 @@
 0;url=index.html#search
 All destinations →
 Check your internet connection and try again.
+GoVeTrip is offline. Restore your internet connection and reload to continue searching.
 GoVeTrip | Offline
+GoVeTripin lentohaku löytyy etusivulta. Valitse määränpää ja päivät vertaillaksesi lentoja.
 Lentohaku löytyy
 Lentohaku | GoVeTrip
 My account | GoVeTrip
 No connection
 Retry
+Review your search details and continue to a booking partner. GoVeTrip does not process reservations or payments.
 User accounts
 You can optionally create a GoVeTrip account with your email address or by continuing with Google. We store your email address, name, a hashed password (for email accounts), your wishlist, recent searches, price alerts and your marketing preference. If you continue with Google, we receive only your name and verified email address from Google. We use this data only to provide your account. If you create a price alert, we email you when the price of that route drops; you can delete the alert at any time. We send you travel offers and tips only if you have given marketing consent, which you can withdraw at any time in your account settings. You can delete your account and all related data at any time in your account settings.
 Your GoVeTrip account: wishlist, recent searches and settings.

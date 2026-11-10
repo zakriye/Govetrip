@@ -28,7 +28,9 @@
     it: ['Seleziona le date', 'Scegli la data di partenza', 'Scegli la data di ritorno', 'Tariffe stimate. Verde = più economico, giallo = medio, rosso = più caro.', 'Ora scegli la data di ritorno.', 'Passeggeri', 'Adulto', 'Bambino', 'Neonato', 'meno di 2 anni', 'Classe di viaggio', 'Economy', 'Premium Economy', 'Business', 'Prima classe', '1. Voli', '2. Hotel', 'Nessun dato sui prezzi per questa tratta. Prova un grande aeroporto vicino.', 'Scegli i luoghi dai suggerimenti e le date.', 'Cerca voli', 'La ricerca dei prezzi non è temporaneamente disponibile. Riprova più tardi.', 'La ricerca dei prezzi non è ancora configurata.'],
     nl: ['Selecteer data', 'Kies vertrekdatum', 'Kies retourdatum', 'Geschatte prijzen. Groen = goedkoopst, geel = gemiddeld, rood = duurst.', 'Kies nu je retourdatum.', 'Passagiers', 'Volwassene', 'Kind', 'Baby', 'jonger dan 2', 'Reisklasse', 'Economy', 'Premium Economy', 'Business', 'First class', '1. Vluchten', '2. Hotel', 'Geen prijsgegevens voor deze route. Probeer een grote luchthaven in de buurt.', 'Kies plaatsen uit de suggesties en kies je data.', 'Vluchten zoeken', 'Prijszoeken is tijdelijk niet beschikbaar. Probeer het later opnieuw.', 'Prijszoeken is nog niet ingesteld.'],
     pl: ['Wybierz daty', 'Wybierz datę wylotu', 'Wybierz datę powrotu', 'Szacowane ceny. Zielony = najtańszy, żółty = średni, czerwony = najdroższy.', 'Wybierz teraz datę powrotu.', 'Pasażerowie', 'Dorosły', 'Dziecko', 'Niemowlę', 'poniżej 2 lat', 'Klasa podróży', 'Ekonomiczna', 'Premium Economy', 'Biznes', 'Pierwsza klasa', '1. Loty', '2. Hotel', 'Brak danych o cenach dla tej trasy. Spróbuj pobliskiego dużego lotniska.', 'Wybierz miejsca z podpowiedzi i swoje daty.', 'Szukaj lotów', 'Wyszukiwanie cen jest tymczasowo niedostępne. Spróbuj ponownie później.', 'Wyszukiwanie cen nie zostało jeszcze skonfigurowane.'],
-    pt: ['Selecionar datas', 'Escolha a data de partida', 'Escolha a data de regresso', 'Tarifas estimadas. Verde = mais barato, amarelo = médio, vermelho = mais caro.', 'Agora escolha a data de regresso.', 'Passageiros', 'Adulto', 'Criança', 'Bebé', 'menos de 2 anos', 'Classe de cabine', 'Económica', 'Premium Economy', 'Executiva', 'Primeira classe', '1. Voos', '2. Hotel', 'Sem dados de preços para esta rota. Tente um aeroporto grande nas proximidades.', 'Escolha os locais nas sugestões e as suas datas.', 'Pesquisar voos', 'A pesquisa de preços está temporariamente indisponível. Tente novamente mais tarde.', 'A pesquisa de preços ainda não está configurada.']
+    pt: ['Selecionar datas', 'Escolha a data de partida', 'Escolha a data de regresso', 'Tarifas estimadas. Verde = mais barato, amarelo = médio, vermelho = mais caro.', 'Agora escolha a data de regresso.', 'Passageiros', 'Adulto', 'Criança', 'Bebé', 'menos de 2 anos', 'Classe de cabine', 'Económica', 'Premium Economy', 'Executiva', 'Primeira classe', '1. Voos', '2. Hotel', 'Sem dados de preços para esta rota. Tente um aeroporto grande nas proximidades.', 'Escolha os locais nas sugestões e as suas datas.', 'Pesquisar voos', 'A pesquisa de preços está temporariamente indisponível. Tente novamente mais tarde.', 'A pesquisa de preços ainda não está configurada.'],
+    zh: ['选择日期', '选择出发日期', '选择返回日期', '预估票价。绿色表示最低，黄色表示中等，红色表示最高。', '现在请选择返回日期。', '乘客', '成人', '儿童', '婴儿', '2 岁以下', '舱位', '经济舱', '高端经济舱', '商务舱', '头等舱', '1. 航班', '2. 酒店', '此航线暂无价格数据。请尝试附近的主要机场。', '请从建议列表中选择地点并选择日期。', '搜索航班', '价格搜索暂时不可用，请稍后重试。', '价格搜索尚未配置。'],
+    ru: ['Выберите даты', 'Выберите дату вылета', 'Выберите дату возвращения', 'Примерные тарифы: зелёный — низкий, жёлтый — средний, красный — высокий.', 'Теперь выберите дату возвращения.', 'Пассажиры', 'Взрослый', 'Ребёнок', 'Младенец', 'до 2 лет', 'Класс', 'Эконом', 'Премиум-эконом', 'Бизнес', 'Первый класс', '1. Авиабилеты', '2. Отель', 'Нет данных о ценах для этого маршрута. Попробуйте ближайший крупный аэропорт.', 'Выберите места из подсказок и укажите даты.', 'Найти авиабилеты', 'Поиск цен временно недоступен. Попробуйте позже.', 'Поиск цен ещё не настроен.']
   };
   function t(s) {
     var lang = (document.documentElement.lang || 'en').slice(0, 2);
@@ -115,22 +117,12 @@
   bindPlace(toInput, 'to');
 
   function setDefaultFrom() {
-    if (state.fromTouched || state.from || geoDone) return;
+    if (state.fromTouched || state.from) return;
     var c = (typeof currentProfile !== 'undefined' && currentProfile.airport || '').match(/\(([A-Z]{3})\)/);
     if (c) { state.from = c[1]; fromInput.value = currentProfile.airport; prefetch(); }
   }
   setDefaultFrom();
-  var geoDone = false;
-  function geoFrom() {
-    fetch('https://ipapi.co/json/').then(function (r) { return r.json(); }).then(function (g) {
-      if (state.fromTouched || !g.city) return;
-      return fetch('https://autocomplete.travelpayouts.com/places2?term=' + encodeURIComponent(g.city) + '&locale=en&types[]=city').then(function (r) { return r.json(); }).then(function (items) {
-        if (state.fromTouched || !items.length) return;
-        geoDone = true; state.from = items[0].code; fromInput.value = items[0].name + ' (' + items[0].code + ')'; prefetch();
-      });
-    }).catch(function () {});
-  }
-  window.addEventListener('load', function () { setTimeout(geoFrom, 2000); setTimeout(setDefaultFrom, 1500); setTimeout(setDefaultFrom, 4000); });
+  window.addEventListener('load', function () { setTimeout(setDefaultFrom, 1500); });
 
   function monthKey(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1); }
   function addMonths(d, n) { return new Date(d.getFullYear(), d.getMonth() + n, 1); }
@@ -313,6 +305,23 @@
     if (!w) window.location.href = url;
   }
   updateButton();
+  var searchParams = new URLSearchParams(window.location.search);
+  var requestedOrigin = searchParams.get('from');
+  var requestedDestination = searchParams.get('to');
+  if (requestedOrigin) {
+    state.from = '';
+    state.fromTouched = true;
+    fromInput.value = requestedOrigin;
+  }
+  if (requestedDestination) {
+    toInput.value = requestedDestination;
+  }
+  if (requestedOrigin || requestedDestination) {
+    Promise.all([
+      requestedOrigin ? resolvePlace(fromInput, 'from') : Promise.resolve(),
+      requestedDestination ? resolvePlace(toInput, 'to') : Promise.resolve()
+    ]).then(function () { prefetch(); render(); });
+  }
   window.addEventListener('gvt-lang', function () { updateButton(); renderPax(); if (!pop.hidden) render(); });
   window.addEventListener('gvt-currency', function () {
     hidePackageResults();
